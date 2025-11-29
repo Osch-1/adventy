@@ -41,7 +41,7 @@ public class AdventuresController : ControllerBase
 
         if ( !skipSearchDateInRangeValidation && ( searchDateTimeOffset < _leftSearchBoarder || searchDateTimeOffset >= _rightSearchBoarder ) )
         {
-            const string msg = "Search date must be in range from 10th of December 2025 up to 31th of December 2025.";
+            const string msg = "Search date must be in range from 10th of December 2025 up to 31st of December 2025.";
             Error error = new( ErrorType.InvalidRequestParameters, ErrorCode.InvalidSearchDate, msg );
             Response response = new( error );
 
