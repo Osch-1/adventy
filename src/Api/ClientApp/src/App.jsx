@@ -3,6 +3,35 @@ import DateCard from './components/DateCard'
 import AdventureCard from './components/AdventureCard'
 import './App.css'
 
+// Error handling function - maps backend error codes to Russian messages
+function getErrorMessage(error) {
+  if (!error) {
+    return '⚠️ Неожиданная ошибка. Пожалуйста, обратитесь к администратору.'
+  }
+
+  const errorType = error.type
+  const errorCode = error.code
+
+  // Handle InvalidRequestParameters
+  if (errorType === 0) { // InvalidRequestParameters
+    switch (errorCode) {
+      case 0: // InvalidSearchDate
+        return '⚠️ Неверная дата запроса. Если вы уверены, что все делаете правильно, пожалуйста, напишите администратору.'
+      case 1: // InvalidUserTimeZone
+        return '⚠️ Неверный часовой пояс. Пожалуйста, обратитесь к администратору.'
+      case 2: // SearchDatePassed
+        return '📅 Дата уже прошла, пора выполнять следующие задания!'
+      case 3: // SearchDateHasNotAppeared
+        return '⏳ Обожди, не торопись, скоро новое приключение будет доступно!'
+      default:
+        return '⚠️ Неверный запрос. Пожалуйста, обратитесь к администратору.'
+    }
+  }
+
+  // Default error message
+  return '⚠️ Неожиданная ошибка. Пожалуйста, обратитесь к администратору.'
+}
+
 function App() {
   const [selectedDate, setSelectedDate] = useState(null)
   const [adventure, setAdventure] = useState(null)
@@ -168,10 +197,12 @@ function App() {
         if (response.ok && data.data) {
           setAdventure(data.data.message)
         } else {
-          setError(data.errors?.[0]?.message || 'Failed to load adventure')
+          // Handle backend errors with Russian messages
+          const errorMessage = getErrorMessage(data.errors?.[0])
+          setError(errorMessage)
         }
       } catch (err) {
-        setError('Failed to load adventure: ' + err.message)
+        setError('⚠️ Неожиданная ошибка. Пожалуйста, обратитесь к администратору.')
       } finally {
         setLoading(false)
       }
@@ -186,9 +217,70 @@ function App() {
     setError(null)
   }
 
+  // Fun phrases for today's adventure title
+  const getAdventureTitle = () => {
+    const phrases = [
+      '🎯 Задание на сегодня',
+      '✨ Твое приключение',
+      '🎄 Новогоднее задание',
+      '🌟 Сегодняшний квест',
+      '🎁 Задание дня',
+      '❄️ Зимнее приключение',
+      '🎊 Твоя миссия',
+      '🎈 Задание для тебя'
+    ]
+    const randomIndex = Math.floor(Math.random() * phrases.length)
+    return phrases[randomIndex]
+  }
+
+  const [showInfoPopup, setShowInfoPopup] = useState(false)
+
+  // Close popup when clicking outside
+  useEffect(() => {
+    if (showInfoPopup) {
+      const handleClickOutside = (event) => {
+        if (!event.target.closest('.app-title-container')) {
+          setShowInfoPopup(false)
+        }
+      }
+      document.addEventListener('click', handleClickOutside)
+      return () => document.removeEventListener('click', handleClickOutside)
+    }
+  }, [showInfoPopup])
+
   return (
     <div className="app">
-      <h1 className="app-title">Adventy - Daily Adventures</h1>
+      <div className="app-header">
+        <div className="app-title-container">
+          <h1 className="app-title">🎄 Создай свое новогоднее приключение! 🎅</h1>
+          <button
+            className="app-info-icon"
+            onClick={(e) => {
+              e.stopPropagation()
+              setShowInfoPopup(!showInfoPopup)
+            }}
+            aria-label="Информация"
+          >
+            ℹ️
+          </button>
+          {showInfoPopup && (
+            <div className="info-popup" onClick={(e) => e.stopPropagation()}>
+              <div className="info-popup-content">
+                <button
+                  className="info-popup-close"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setShowInfoPopup(false)
+                  }}
+                >
+                  ×
+                </button>
+                <p>Прочитай задание, выполни его и пришли ответ в необходимом формате в чат ТехОтдела в тг</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
       <div className="cards-container">
         {visibleDates.map((dateInfo, index) => (
           <DateCard
@@ -213,6 +305,7 @@ function App() {
             d.date.getUTCMonth() === selectedDate.getUTCMonth() &&
             d.date.getUTCDate() === selectedDate.getUTCDate()
           )}
+          adventureTitle={getAdventureTitle()}
           onClose={handleClose}
         />
       )}

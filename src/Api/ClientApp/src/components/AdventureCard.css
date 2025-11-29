@@ -64,6 +64,7 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  box-sizing: border-box;
 }
 
 .adventure-card-front {
@@ -114,13 +115,107 @@
 
 .adventure-content {
   width: 100%;
+  max-width: 90%;
   text-align: center;
+  margin: 0 auto;
+  position: relative;
+}
+
+.adventure-content-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  width: 100%;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
 }
 
 .adventure-content h2 {
   font-size: 2rem;
-  margin-bottom: 30px;
+  margin: 0;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  word-wrap: break-word;
+  display: flex;
+  align-items: center;
+}
+
+.adventure-info-icon {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 5px 8px;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+  transition: opacity 0.3s ease, background 0.3s ease, transform 0.3s ease;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.adventure-info-icon:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.adventure-info-popup {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 10px;
+  z-index: 100;
+  min-width: 280px;
+  max-width: 400px;
+}
+
+.adventure-info-popup-content {
+  background: rgba(15, 23, 42, 0.98);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  padding: 18px;
+  color: white;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  position: relative;
+}
+
+.adventure-info-popup-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease;
+}
+
+.adventure-info-popup-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.adventure-info-popup-content p {
+  margin: 0;
+  padding-right: 25px;
 }
 
 .adventure-message {
@@ -129,6 +224,9 @@
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
   white-space: pre-wrap;
   word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+  hyphens: auto;
 }
 
 .adventure-loading {
@@ -162,11 +260,21 @@
 .adventure-error {
   text-align: center;
   font-size: 1.2rem;
+  padding: 20px;
+  max-width: 90%;
+  margin: 0 auto;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .adventure-error p:first-child {
   font-size: 3rem;
   margin-bottom: 20px;
+}
+
+.adventure-error p:last-child {
+  line-height: 1.6;
+  white-space: pre-wrap;
 }
 
 .adventure-message-placeholder {
@@ -197,12 +305,18 @@
     width: 95%;
     max-width: none;
     aspect-ratio: 2/3;
+    margin: 10px;
   }
 
   .adventure-card-front,
   .adventure-card-back {
     padding: 25px 18px;
     border-radius: 20px;
+  }
+
+  .adventure-content {
+    max-width: 95%;
+    padding: 0 5px;
   }
 
   .adventure-close {
@@ -217,14 +331,39 @@
     font-size: 1.4rem;
   }
 
+  .adventure-content-header {
+    margin-bottom: 20px;
+    gap: 10px;
+  }
+
   .adventure-content h2 {
     font-size: 1.4rem;
-    margin-bottom: 20px;
+    word-wrap: break-word;
+  }
+
+  .adventure-info-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 1rem;
+    margin-left: 10px;
+    padding: 4px 6px;
+  }
+
+  .adventure-info-popup {
+    min-width: 240px;
+    max-width: 90%;
+  }
+
+  .adventure-info-popup-content {
+    padding: 15px;
+    font-size: 0.85rem;
   }
 
   .adventure-message {
     font-size: 1rem;
     line-height: 1.6;
+    max-width: 100%;
+    overflow-wrap: break-word;
   }
 
   .placeholder-text {
@@ -254,12 +393,23 @@
   .adventure-card {
     width: 98%;
     aspect-ratio: 3/4;
+    margin: 5px;
   }
 
   .adventure-card-front,
   .adventure-card-back {
-    padding: 20px 15px;
+    padding: 20px 12px;
     border-radius: 15px;
+  }
+
+  .adventure-content {
+    max-width: 98%;
+    padding: 0 3px;
+  }
+
+  .adventure-error {
+    padding: 15px 10px;
+    max-width: 95%;
   }
 
   .adventure-close {
@@ -274,14 +424,42 @@
     font-size: 1.2rem;
   }
 
+  .adventure-content-header {
+    margin-bottom: 15px;
+    gap: 8px;
+  }
+
   .adventure-content h2 {
     font-size: 1.2rem;
-    margin-bottom: 15px;
+    word-wrap: break-word;
+  }
+
+  .adventure-info-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 0.9rem;
+    margin-left: 8px;
+    padding: 3px 5px;
+  }
+
+  .adventure-info-popup {
+    min-width: 200px;
+    max-width: 85%;
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .adventure-info-popup-content {
+    padding: 12px;
+    font-size: 0.8rem;
   }
 
   .adventure-message {
     font-size: 0.95rem;
     line-height: 1.5;
+    max-width: 100%;
+    overflow-wrap: break-word;
   }
 
   .placeholder-text {

@@ -1,11 +1,25 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import './AdventureCard.css'
 
-function AdventureCard({ date, adventure, loading, error, dateInfo, onClose }) {
+function AdventureCard({ date, adventure, loading, error, dateInfo, adventureTitle, onClose }) {
   const isToday = dateInfo?.isToday || false
   const isPast = dateInfo?.isPast || false
   const isFuture = dateInfo?.isFuture || false
   const hasAdventure = adventure !== null && adventure !== undefined
+  const [showInfoPopup, setShowInfoPopup] = useState(false)
+
+  // Close popup when clicking outside
+  useEffect(() => {
+    if (showInfoPopup) {
+      const handleClickOutside = (event) => {
+        if (!event.target.closest('.adventure-content-header')) {
+          setShowInfoPopup(false)
+        }
+      }
+      document.addEventListener('click', handleClickOutside)
+      return () => document.removeEventListener('click', handleClickOutside)
+    }
+  }, [showInfoPopup])
 
   useEffect(() => {
     // Get the app container and root element
@@ -112,7 +126,38 @@ function AdventureCard({ date, adventure, loading, error, dateInfo, onClose }) {
                 )}
                 {!loading && !error && adventure && (
                   <div className="adventure-content">
-                    <h2>{isToday ? "Today's Adventure" : "Сегодняшнее приключение"}</h2>
+                    <div className="adventure-content-header">
+                      <h2>{isToday ? (adventureTitle || '🎯 Задание на сегодня') : 'Приключение'}</h2>
+                      <button
+                        className="adventure-info-icon"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setShowInfoPopup(!showInfoPopup)
+                        }}
+                        aria-label="Информация"
+                      >
+                        ℹ️
+                      </button>
+                      {showInfoPopup && (
+                        <div
+                          className="adventure-info-popup"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <div className="adventure-info-popup-content">
+                            <button
+                              className="adventure-info-popup-close"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                setShowInfoPopup(false)
+                              }}
+                            >
+                              ×
+                            </button>
+                            <p>Прочитай задание, выполни его и пришли ответ в необходимом формате в чат ТехОтдела в тг</p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                     <div className="adventure-message">{adventure}</div>
                   </div>
                 )}
