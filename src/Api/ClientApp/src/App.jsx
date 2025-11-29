@@ -12,7 +12,7 @@ function getErrorMessage(error) {
   const errorType = error.type
   const errorCode = error.code
 
-  // Handle InvalidRequestParameters
+  // Handle InvalidRequestParameters (ErrorType = 0)
   if (errorType === 0) { // InvalidRequestParameters
     switch (errorCode) {
       case 0: // InvalidSearchDate
@@ -23,12 +23,24 @@ function getErrorMessage(error) {
         return '📅 Дата уже прошла, пора выполнять следующие задания!'
       case 3: // SearchDateHasNotAppeared
         return '⏳ Обожди, не торопись, скоро новое приключение будет доступно!'
+      case 4: // ResourceIsNotConfigured
+        return '⚠️ Ресурс не настроен. Пожалуйста, обратитесь к администратору.'
       default:
         return '⚠️ Неверный запрос. Пожалуйста, обратитесь к администратору.'
     }
   }
 
-  // Default error message
+  // Handle InternalServerError (ErrorType = 1)
+  if (errorType === 1) { // InternalServerError
+    switch (errorCode) {
+      case 4: // ResourceIsNotConfigured
+        return '⚠️ Ресурс не настроен. Пожалуйста, обратитесь к администратору.'
+      default:
+        return '⚠️ Внутренняя ошибка сервера. Пожалуйста, обратитесь к администратору.'
+    }
+  }
+
+  // Default error message for unknown error types
   return '⚠️ Неожиданная ошибка. Пожалуйста, обратитесь к администратору.'
 }
 
@@ -247,6 +259,20 @@ function App() {
       return () => document.removeEventListener('click', handleClickOutside)
     }
   }, [showInfoPopup])
+
+  // Handle Escape key to close info popup (stack behavior - only if card is not open)
+  useEffect(() => {
+    // Only handle Escape for main page info popup if no card is open
+    if (showInfoPopup && !selectedDate) {
+      const handleEscape = (event) => {
+        if (event.key === 'Escape') {
+          setShowInfoPopup(false)
+        }
+      }
+      document.addEventListener('keydown', handleEscape)
+      return () => document.removeEventListener('keydown', handleEscape)
+    }
+  }, [showInfoPopup, selectedDate])
 
   return (
     <div className="app">

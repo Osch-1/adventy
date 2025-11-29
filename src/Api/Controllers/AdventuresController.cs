@@ -98,7 +98,7 @@ public class AdventuresController : ControllerBase
         {
             const string msgTemplate = "Requested date {0} does not have mapped task, please contact hr.";
             string msg = string.Format( msgTemplate, searchDateTime.ToString( "yyyy-MM-dd" ) );
-            Error error = new( ErrorType.InvalidRequestParameters, ErrorCode.SearchDateHasNotAppeared, msg );
+            Error error = new( ErrorType.InternalServerError, ErrorCode.ResourceIsNotConfigured, msg );
             Response response = new( error );
 
             return StatusCode( ( int )HttpStatusCode.InternalServerError, response );

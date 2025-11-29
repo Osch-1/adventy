@@ -6,4 +6,5 @@ public enum ErrorCode
     InvalidUserTimeZone = 1,
     SearchDatePassed = 2,
     SearchDateHasNotAppeared = 3,
+    ResourceIsNotConfigured = 4,
 }

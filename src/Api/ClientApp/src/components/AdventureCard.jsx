@@ -50,10 +50,16 @@ function AdventureCard({ date, adventure, loading, error, dateInfo, adventureTit
       appContainer.style.overflowY = 'hidden'
     }
 
-    // Handle Escape key to close card
+    // Handle Escape key - close info popup first, then card (stack behavior)
     const handleEscape = (event) => {
       if (event.key === 'Escape') {
-        onClose()
+        // If info popup is open, close it first (stack behavior)
+        if (showInfoPopup) {
+          setShowInfoPopup(false)
+        } else {
+          // If no info popup, close the card
+          onClose()
+        }
       }
     }
 
@@ -84,7 +90,7 @@ function AdventureCard({ date, adventure, loading, error, dateInfo, adventureTit
 
       document.removeEventListener('keydown', handleEscape)
     }
-  }, [onClose])
+  }, [onClose, showInfoPopup])
 
   const formatDate = (date) => {
     return date.toLocaleDateString('en-US', {

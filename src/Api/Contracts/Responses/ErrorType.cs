@@ -3,4 +3,5 @@
 public enum ErrorType
 {
     InvalidRequestParameters = 0,
+    InternalServerError = 1,
 }
