@@ -1,0 +1,203 @@
+.date-card {
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%);
+  border-radius: 20px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+  border: 3px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.date-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 20px;
+}
+
+.date-card:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.9);
+  background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%);
+}
+
+.date-card:hover::before {
+  opacity: 1;
+}
+
+.date-card.today {
+  background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 50%, #a78bfa 100%);
+  border-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 12px 24px rgba(124, 58, 237, 0.6), 0 0 20px rgba(124, 58, 237, 0.4);
+  animation: pulse-glow 2s ease-in-out infinite;
+  position: relative;
+}
+
+.date-card.today::after {
+  content: '✨';
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-size: 1.2rem;
+  animation: sparkle 1.5s ease-in-out infinite;
+  z-index: 2;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 12px 24px rgba(124, 58, 237, 0.6), 0 0 20px rgba(124, 58, 237, 0.4);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 12px 24px rgba(124, 58, 237, 0.8), 0 0 30px rgba(124, 58, 237, 0.6);
+    transform: scale(1.02);
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.2) rotate(180deg);
+  }
+}
+
+.date-card.selected {
+  transform: scale(1.1);
+  z-index: 10;
+}
+
+.date-card-content {
+  text-align: center;
+  color: white;
+  z-index: 1;
+  position: relative;
+  width: 100%;
+}
+
+.date-card-day {
+  font-size: 0.9rem;
+  font-weight: 600;
+  opacity: 0.9;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.date-card-date {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+  margin: 10px 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.date-card-month {
+  font-size: 1rem;
+  font-weight: 600;
+  opacity: 0.9;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.date-card-year {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+.date-card-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 768px) {
+  .date-card {
+    padding: 12px;
+    border-radius: 15px;
+  }
+
+  .date-card-date {
+    font-size: 1.75rem;
+    margin: 8px 0;
+  }
+
+  .date-card-day {
+    font-size: 0.75rem;
+    margin-bottom: 3px;
+  }
+
+  .date-card-month {
+    font-size: 0.85rem;
+    margin-bottom: 3px;
+  }
+
+  .date-card-year {
+    font-size: 0.75rem;
+  }
+
+  .date-card-badge {
+    top: 8px;
+    right: 8px;
+    padding: 4px 8px;
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .date-card {
+    padding: 10px;
+    border-radius: 12px;
+  }
+
+  .date-card-date {
+    font-size: 1.5rem;
+    margin: 6px 0;
+  }
+
+  .date-card-day {
+    font-size: 0.7rem;
+  }
+
+  .date-card-month {
+    font-size: 0.8rem;
+  }
+
+  .date-card-year {
+    font-size: 0.7rem;
+  }
+
+  .date-card-badge {
+    top: 6px;
+    right: 6px;
+    padding: 3px 6px;
+    font-size: 0.6rem;
+  }
+}
+
