@@ -163,10 +163,7 @@
   }
 
   .date-card-badge {
-    top: 8px;
-    right: 8px;
-    padding: 4px 8px;
-    font-size: 0.65rem;
+    display: none;
   }
 }
 
@@ -194,10 +191,7 @@
   }
 
   .date-card-badge {
-    top: 6px;
-    right: 6px;
-    padding: 3px 6px;
-    font-size: 0.6rem;
+    display: none;
   }
 }
 

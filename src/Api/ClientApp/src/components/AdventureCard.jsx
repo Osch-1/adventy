@@ -159,7 +159,7 @@ function AdventureCard({ date, adventure, loading, error, dateInfo, adventureTit
                             >
                               ×
                             </button>
-                            <p>Прочитай задание, выполни его и пришли ответ в необходимом формате в чат ТехОтдела в тг</p>
+                            <p>Прочитай задание, выполни его и пришли ответ в чат ТехОтдела в тг</p>
                           </div>
                         </div>
                       )}
