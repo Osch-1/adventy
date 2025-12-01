@@ -122,16 +122,18 @@
   grid-auto-rows: 1fr;
 }
 
-/* Mobile: allow scrolling with flexible columns */
+/* Mobile: vertical scrollable list */
 @media (max-width: 768px) {
   .app {
     padding: 15px;
   }
 
   .cards-container {
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    display: flex;
+    flex-direction: column;
     gap: 12px;
     padding-bottom: 20px;
+    max-width: 100%;
   }
 
   .app-header {
@@ -167,8 +169,11 @@
   }
 
   .cards-container {
-    grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+    display: flex;
+    flex-direction: column;
     gap: 10px;
+    padding-bottom: 20px;
+    max-width: 100%;
   }
 
   .app-header {

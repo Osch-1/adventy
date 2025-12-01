@@ -139,59 +139,123 @@
 
 @media (max-width: 768px) {
   .date-card {
-    padding: 12px;
+    aspect-ratio: auto;
+    min-height: 80px;
+    padding: 15px 20px;
     border-radius: 15px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
 
-  .date-card-date {
-    font-size: 1.75rem;
-    margin: 8px 0;
+  .date-card-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    justify-content: space-between;
   }
 
   .date-card-day {
-    font-size: 0.75rem;
-    margin-bottom: 3px;
+    font-size: 0.85rem;
+    margin-bottom: 0;
+    min-width: 50px;
+    text-align: left;
+  }
+
+  .date-card-date {
+    font-size: 2rem;
+    margin: 0;
+    min-width: 50px;
+    text-align: center;
   }
 
   .date-card-month {
-    font-size: 0.85rem;
-    margin-bottom: 3px;
+    font-size: 0.9rem;
+    margin-bottom: 0;
+    min-width: 60px;
+    text-align: left;
   }
 
   .date-card-year {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
+    min-width: 50px;
+    text-align: left;
   }
 
   .date-card-badge {
     display: none;
+  }
+
+  .date-card:hover {
+    transform: translateX(5px) scale(1.02);
+  }
+
+  .date-card.selected {
+    transform: scale(1.02);
+    border-color: rgba(255, 255, 255, 0.9);
   }
 }
 
 @media (max-width: 480px) {
   .date-card {
-    padding: 10px;
+    aspect-ratio: auto;
+    min-height: 70px;
+    padding: 12px 15px;
     border-radius: 12px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
 
-  .date-card-date {
-    font-size: 1.5rem;
-    margin: 6px 0;
+  .date-card-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    justify-content: space-between;
   }
 
   .date-card-day {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
+    margin-bottom: 0;
+    min-width: 45px;
+    text-align: left;
+  }
+
+  .date-card-date {
+    font-size: 1.75rem;
+    margin: 0;
+    min-width: 45px;
+    text-align: center;
   }
 
   .date-card-month {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
+    margin-bottom: 0;
+    min-width: 55px;
+    text-align: left;
   }
 
   .date-card-year {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
+    min-width: 45px;
+    text-align: left;
   }
 
   .date-card-badge {
     display: none;
+  }
+
+  .date-card:hover {
+    transform: translateX(5px) scale(1.02);
+  }
+
+  .date-card.selected {
+    transform: scale(1.02);
+    border-color: rgba(255, 255, 255, 0.9);
   }
 }
 

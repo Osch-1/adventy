@@ -74,8 +74,8 @@ function App() {
   const dates = useMemo(() => {
     // Create dates in UTC to avoid timezone issues
     const startYear = 2025
-    const startMonth = 10 // December (0-indexed)
-    const startDay = 25
+    const startMonth = 11 // December (0-indexed)
+    const startDay = 10
 
     const endYear = 2025
     const endMonth = 11 // December
