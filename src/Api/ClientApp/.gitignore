@@ -3,4 +3,5 @@ dist
 wwwroot
 .DS_Store
 *.log
+package-lock.json
 
