@@ -35,6 +35,14 @@ sudo ./deployment/deploy-nginx.sh
 
 Your application should now be accessible via HTTP on port 80 (and HTTPS on port 443 if SSL is configured).
 
+## Production Server
+
+**Production URL:** http://81.17.154.37/
+
+The application is deployed and accessible at the above address. Use this URL for testing and access.
+
+For testing instructions, see: [TESTING_GUIDE_RU.md](../docs/TESTING_GUIDE_RU.md)
+
 ## Deployment Steps
 
 Detailed step-by-step instructions:

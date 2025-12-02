@@ -2,6 +2,12 @@
 
 This folder contains documentation for the Adventy application.
 
+## Production Server
+
+**Production URL:** http://81.17.154.37/
+
+The application is deployed and accessible at the above address.
+
 ## Available Documentation
 
 - **[BUILD.md](./BUILD.md)** - Instructions for building the application

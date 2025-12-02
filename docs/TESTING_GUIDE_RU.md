@@ -15,8 +15,10 @@ Adventy - это календарь приключений, где каждый 
 ## Как открыть приложение?
 
 1. Откройте браузер (Chrome, Firefox, Edge и т.д.)
-2. Перейдите по адресу вашего приложения (например: `https://adventy.yourcompany.com`)
+2. Перейдите по адресу приложения: **http://81.17.154.37/**
 3. Вы увидите календарь с карточками дат
+
+**Производственный сервер:** http://81.17.154.37/
 
 ---
 
@@ -46,7 +48,7 @@ Adventy - это календарь приключений, где каждый 
 
 **Формат:**
 ```
-https://adventy.yourcompany.com?first=СЕКРЕТ1&second=СЕКРЕТ2&third=СЕКРЕТ3&showPast=true
+http://81.17.154.37/?first=СЕКРЕТ1&second=СЕКРЕТ2&third=СЕКРЕТ3&showPast=true
 ```
 
 ### Параметры для отображения дат
@@ -55,7 +57,7 @@ https://adventy.yourcompany.com?first=СЕКРЕТ1&second=СЕКРЕТ2&third=�
 - По умолчанию прошедшие даты **скрыты** из календаря
 - Чтобы показать прошедшие даты, добавьте `showPast=true` в адрес:
   ```
-  https://adventy.yourcompany.com?showPast=true
+  http://81.17.154.37/?showPast=true
   ```
 - Это позволит увидеть все даты, включая прошедшие, в календаре
 
@@ -90,7 +92,7 @@ https://adventy.yourcompany.com?first=СЕКРЕТ1&second=СЕКРЕТ2&third=�
 1. Откройте браузер
 2. Введите адрес с параметрами `showPast=true` и `third`:
    ```
-   https://adventy.yourcompany.com?showPast=true&third=AYgAQYogQyCggDEAAYogQYiQUyC_secret_to_skip_date_passed
+   http://81.17.154.37/?showPast=true&third=AYgAQYogQyCggDEAAYogQYiQUyC_secret_to_skip_date_passed
    ```
    - `showPast=true` - показывает прошедшие даты в календаре
    - `third` - позволяет открыть задание для прошедшей даты
@@ -113,7 +115,7 @@ https://adventy.yourcompany.com?first=СЕКРЕТ1&second=СЕКРЕТ2&third=�
 1. Откройте браузер
 2. Введите адрес с параметром `second`:
    ```
-   https://adventy.yourcompany.com?second=EgZjaHJvbWUyCggAE_secret_to_skip_date_has_not_appeared
+   http://81.17.154.37/?second=EgZjaHJvbWUyCggAE_secret_to_skip_date_has_not_appeared
    ```
 3. Нажмите Enter
 4. Найдите любую карточку с будущей датой
@@ -132,7 +134,7 @@ https://adventy.yourcompany.com?first=СЕКРЕТ1&second=СЕКРЕТ2&third=�
 1. Откройте браузер
 2. Введите адрес с параметром `first`:
    ```
-   https://adventy.yourcompany.com?first=CggAEEUYFhgeGDkyCggBEAAYgA_secret_to_skip_date_in_range
+   http://81.17.154.37/?first=CggAEEUYFhgeGDkyCggBEAAYgA_secret_to_skip_date_in_range
    ```
 3. Нажмите Enter
 4. Попробуйте открыть любую карточку
@@ -149,7 +151,7 @@ https://adventy.yourcompany.com?first=СЕКРЕТ1&second=СЕКРЕТ2&third=�
 1. Откройте браузер
 2. Введите адрес со всеми параметрами:
    ```
-   https://adventy.yourcompany.com?showPast=true&first=CggAEEUYFhgeGDkyCggBEAAYgA_secret_to_skip_date_in_range&second=EgZjaHJvbWUyCggAE_secret_to_skip_date_has_not_appeared&third=AYgAQYogQyCggDEAAYogQYiQUyC_secret_to_skip_date_passed
+   http://81.17.154.37/?showPast=true&first=CggAEEUYFhgeGDkyCggBEAAYgA_secret_to_skip_date_in_range&second=EgZjaHJvbWUyCggAE_secret_to_skip_date_has_not_appeared&third=AYgAQYogQyCggDEAAYogQYiQUyC_secret_to_skip_date_passed
    ```
 3. Нажмите Enter
 4. Теперь вы можете:
@@ -244,5 +246,15 @@ https://adventy.yourcompany.com?first=СЕКРЕТ1&second=СЕКРЕТ2&third=�
 
 ---
 
-*Документ обновлен: ноябрь 2025*
+---
+
+## Производственный сервер
+
+**URL:** http://81.17.154.37/
+
+Приложение развернуто и доступно по указанному адресу. Используйте этот адрес для всех тестовых сценариев.
+
+---
+
+*Документ обновлен: декабрь 2025*
 
