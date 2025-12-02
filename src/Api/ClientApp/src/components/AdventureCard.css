@@ -12,6 +12,8 @@
   z-index: 1000;
   animation: fadeIn 0.3s ease;
   overflow: hidden;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 @keyframes fadeIn {
@@ -25,11 +27,13 @@
 
 .adventure-card {
   position: relative;
-  width: 90%;
+  width: min(90%, calc((100vh - 40px) * 3 / 4));
   max-width: 600px;
+  max-height: calc(100vh - 40px);
   aspect-ratio: 3/4;
   perspective: 1000px;
   animation: scaleIn 0.4s ease;
+  box-sizing: border-box;
 }
 
 @keyframes scaleIn {
@@ -47,9 +51,11 @@
   position: relative;
   width: 100%;
   height: 100%;
+  max-height: 100%;
   transition: transform 0.6s;
   transform-style: preserve-3d;
   transform: rotateY(180deg);
+  box-sizing: border-box;
 }
 
 .adventure-card-front,
@@ -301,11 +307,16 @@
 }
 
 @media (max-width: 768px) {
+  .adventure-overlay {
+    padding: 15px;
+  }
+
   .adventure-card {
-    width: 95%;
+    width: min(95%, calc((100vh - 30px) * 2 / 3));
     max-width: none;
+    max-height: calc(100vh - 30px);
     aspect-ratio: 2/3;
-    margin: 10px;
+    margin: 0;
   }
 
   .adventure-card-front,
@@ -390,10 +401,15 @@
 }
 
 @media (max-width: 480px) {
+  .adventure-overlay {
+    padding: 10px;
+  }
+
   .adventure-card {
-    width: 98%;
+    width: min(98%, calc((100vh - 20px) * 3 / 4));
+    max-height: calc(100vh - 20px);
     aspect-ratio: 3/4;
-    margin: 5px;
+    margin: 0;
   }
 
   .adventure-card-front,
