@@ -57,34 +57,69 @@ fi
 cd "$CLIENT_APP_PATH" || exit 1
 
 # Ensure we're not in production mode (which skips devDependencies)
-export NODE_ENV=""
+# This is important because vite is in devDependencies and we need it to build
 unset NODE_ENV 2>/dev/null || true
+export NODE_ENV=""
+
+# Show current directory and npm/node versions
+echo "Working directory: $(pwd)"
+echo "Node version: $(node --version)"
+echo "npm version: $(npm --version)"
+echo ""
 
 # Install frontend dependencies
 # Always ensure dependencies are installed/up-to-date
 if [ ! -d "node_modules" ] || [ ! -f "node_modules/.bin/vite" ]; then
     echo "Installing frontend dependencies (including devDependencies)..."
-    echo "This may take a few minutes..."
+    echo "This may take a few minutes depending on your internet connection..."
+    echo ""
 
-    # Explicitly install all dependencies including devDependencies
-    # Use --production=false to ensure devDependencies are installed
-    npm install --production=false
+    # Show what will be installed
+    if [ -f "package.json" ]; then
+        echo "Packages to install:"
+        echo "  Dependencies: $(grep -A 10 '"dependencies"' package.json | grep -c '":' || echo '0')"
+        echo "  DevDependencies: $(grep -A 10 '"devDependencies"' package.json | grep -c '":' || echo '0')"
+        echo ""
+    fi
+
+    echo "Starting npm install (this will show progress)..."
+    echo "You should see package names being downloaded and installed."
+    echo "----------------------------------------"
+    echo ""
+
+    # Install all dependencies including devDependencies
+    # Since NODE_ENV is unset, devDependencies will be installed by default
+    # --loglevel=info shows what's being installed
+    # --progress=true shows download progress bars
+    npm install --loglevel=info --progress=true
+
     if [ $? -ne 0 ]; then
-        echo "Error: npm install failed"
+        echo ""
+        echo "Error: npm install failed (exit code: $NPM_EXIT_CODE)"
         echo "Trying to clean and reinstall..."
+        echo "Removing node_modules and package-lock.json..."
         rm -rf node_modules package-lock.json
-        npm install --production=false
+        echo "Reinstalling dependencies..."
+        npm install --loglevel=info --progress=true
         if [ $? -ne 0 ]; then
+            echo ""
             echo "Error: npm install failed after cleanup"
+            echo "Please check:"
+            echo "  - Internet connection"
+            echo "  - npm registry access"
+            echo "  - Disk space"
             exit 1
         fi
     fi
+    echo ""
+    echo "Dependencies installed successfully!"
 else
     echo "Frontend dependencies already installed"
     echo "Verifying vite is available..."
     if [ ! -f "node_modules/.bin/vite" ]; then
         echo "Warning: vite not found, reinstalling dependencies..."
-        npm install --production=false
+        echo "Installing packages (showing progress)..."
+        npm install --loglevel=info --progress=true
     fi
 fi
 
@@ -95,7 +130,7 @@ if [ ! -f "node_modules/.bin/vite" ]; then
     if grep -q '"vite"' package.json; then
         echo "vite is in package.json, but not installed"
         echo "Trying to install vite explicitly..."
-        npm install vite @vitejs/plugin-react --save-dev --production=false
+        npm install vite @vitejs/plugin-react --save-dev
         if [ $? -ne 0 ]; then
             echo "Error: Could not install vite"
             echo "Please check npm and node versions:"
@@ -112,7 +147,10 @@ fi
 echo "Frontend dependencies verified (vite found)"
 
 # Build the React app
+echo ""
 echo "Building React application..."
+echo "This may take a minute..."
+echo "----------------------------------------"
 npm run build
 
 if [ $? -ne 0 ]; then
