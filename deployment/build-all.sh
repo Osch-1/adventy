@@ -56,15 +56,60 @@ fi
 
 cd "$CLIENT_APP_PATH" || exit 1
 
-# Install frontend dependencies if needed
-if [ ! -d "node_modules" ]; then
-    echo "Installing frontend dependencies..."
-    npm install
+# Ensure we're not in production mode (which skips devDependencies)
+export NODE_ENV=""
+unset NODE_ENV 2>/dev/null || true
+
+# Install frontend dependencies
+# Always ensure dependencies are installed/up-to-date
+if [ ! -d "node_modules" ] || [ ! -f "node_modules/.bin/vite" ]; then
+    echo "Installing frontend dependencies (including devDependencies)..."
+    echo "This may take a few minutes..."
+
+    # Explicitly install all dependencies including devDependencies
+    # Use --production=false to ensure devDependencies are installed
+    npm install --production=false
     if [ $? -ne 0 ]; then
         echo "Error: npm install failed"
+        echo "Trying to clean and reinstall..."
+        rm -rf node_modules package-lock.json
+        npm install --production=false
+        if [ $? -ne 0 ]; then
+            echo "Error: npm install failed after cleanup"
+            exit 1
+        fi
+    fi
+else
+    echo "Frontend dependencies already installed"
+    echo "Verifying vite is available..."
+    if [ ! -f "node_modules/.bin/vite" ]; then
+        echo "Warning: vite not found, reinstalling dependencies..."
+        npm install --production=false
+    fi
+fi
+
+# Verify vite is available
+if [ ! -f "node_modules/.bin/vite" ]; then
+    echo "Error: vite is not installed after npm install"
+    echo "Checking package.json..."
+    if grep -q '"vite"' package.json; then
+        echo "vite is in package.json, but not installed"
+        echo "Trying to install vite explicitly..."
+        npm install vite @vitejs/plugin-react --save-dev --production=false
+        if [ $? -ne 0 ]; then
+            echo "Error: Could not install vite"
+            echo "Please check npm and node versions:"
+            echo "  node: $(node --version)"
+            echo "  npm: $(npm --version)"
+            exit 1
+        fi
+    else
+        echo "Error: vite is not in package.json"
         exit 1
     fi
 fi
+
+echo "Frontend dependencies verified (vite found)"
 
 # Build the React app
 echo "Building React application..."
