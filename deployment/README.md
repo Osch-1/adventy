@@ -106,9 +106,22 @@ For complete production deployment instructions, see:
    sudo systemctl reload nginx
    ```
 
+## Troubleshooting
+
+If you encounter issues during deployment, see:
+
+- **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** - Common issues and solutions
+
+Common issues:
+- .NET SDK installation errors
+- Nginx configuration problems
+- Service startup issues
+- Build failures
+
 ## See Also
 
 - [DEPLOYMENT.md](./DEPLOYMENT.md) - Complete Ubuntu deployment guide
+- [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) - Troubleshooting guide
 - [BUILD.md](../docs/BUILD.md) - Detailed build instructions
 - [LOCAL_DEVELOPMENT.md](../docs/LOCAL_DEVELOPMENT.md) - Local development guide
 - [nginx/README.md](../nginx/README.md) - Nginx configuration guide
