@@ -35,93 +35,66 @@ apt-get install -y \
 # Install .NET SDK 9.0
 echo "Installing .NET SDK 9.0..."
 if ! command -v dotnet &> /dev/null; then
-    # Add Microsoft package repository
-    echo "Adding Microsoft package repository..."
-    UBUNTU_VERSION=$(lsb_release -rs)
-    echo "Detected Ubuntu version: $UBUNTU_VERSION"
+    echo "Using official dotnet-install script (most reliable method)..."
 
-    # Download and install Microsoft package repository
-    wget https://packages.microsoft.com/config/ubuntu/${UBUNTU_VERSION}/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-    dpkg -i packages-microsoft-prod.deb
-    rm packages-microsoft-prod.deb
+    # Install prerequisites for dotnet-install script
+    echo "Installing prerequisites..."
+    apt-get install -y libicu-dev libssl-dev || true
 
-    # Update package list
-    echo "Updating package list..."
-    apt-get update -y
+    # Use official dotnet-install script - install directly to system directory
+    DOTNET_INSTALL_DIR="/usr/share/dotnet"
+    mkdir -p "$DOTNET_INSTALL_DIR"
 
-    # Try to install .NET SDK 9.0, fallback to latest if not available
-    echo "Attempting to install .NET SDK 9.0..."
-    if apt-cache search dotnet-sdk-9.0 | grep -q "dotnet-sdk-9.0"; then
-        apt-get install -y dotnet-sdk-9.0
-        echo ".NET SDK 9.0 installed successfully"
-    else
-        echo "Warning: .NET SDK 9.0 not found in repository"
-        echo "Checking available .NET SDK versions..."
-        apt-cache search dotnet-sdk | grep -E "dotnet-sdk-[0-9]" | head -5
+    echo "Downloading and running dotnet-install script..."
+    echo "This may take a few minutes..."
 
-        echo ""
-        echo "Attempting alternative installation method using official dotnet-install script..."
+    # Temporarily disable exit on error for this section
+    set +e
+    curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin \
+        --version latest \
+        --channel 9.0 \
+        --install-dir "$DOTNET_INSTALL_DIR"
+    INSTALL_EXIT_CODE=$?
+    set -e
 
-        # Install prerequisites for dotnet-install script
-        apt-get install -y libicu-dev libssl-dev
-
-        # Use official dotnet-install script
-        DOTNET_INSTALL_DIR="/usr/share/dotnet"
-        mkdir -p "$DOTNET_INSTALL_DIR"
-
-        echo "Downloading and running dotnet-install script..."
-        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin \
-            --version latest \
-            --channel 9.0 \
-            --install-dir "$DOTNET_INSTALL_DIR" \
-            --no-path
-
-        # Add dotnet to PATH for current session
-        export PATH="$DOTNET_INSTALL_DIR:$PATH"
-
-        # Create symlink or add to PATH permanently
+    if [ $INSTALL_EXIT_CODE -eq 0 ] && [ -f "$DOTNET_INSTALL_DIR/dotnet" ]; then
+        # Create symlink for system-wide access
         if [ ! -f /usr/local/bin/dotnet ]; then
-            ln -s "$DOTNET_INSTALL_DIR/dotnet" /usr/local/bin/dotnet 2>/dev/null || true
+            ln -sf "$DOTNET_INSTALL_DIR/dotnet" /usr/local/bin/dotnet
         fi
+
+        # Add to PATH for current session
+        export PATH="$DOTNET_INSTALL_DIR:$PATH"
+        export PATH="/usr/local/bin:$PATH"
 
         # Verify installation
-        if [ -f "$DOTNET_INSTALL_DIR/dotnet" ]; then
-            INSTALLED_VERSION=$("$DOTNET_INSTALL_DIR/dotnet" --version 2>/dev/null || echo "unknown")
-            echo ".NET SDK installed via dotnet-install script (version: $INSTALLED_VERSION)"
-
-            # Verify it's accessible
-            if command -v dotnet &> /dev/null; then
-                echo ".NET SDK is now available in PATH"
-            else
-                echo "Warning: .NET SDK installed but may not be in PATH"
-                echo "Add to PATH: export PATH=\"$DOTNET_INSTALL_DIR:\$PATH\""
-            fi
+        if "$DOTNET_INSTALL_DIR/dotnet" --version > /dev/null 2>&1; then
+            INSTALLED_VERSION=$("$DOTNET_INSTALL_DIR/dotnet" --version)
+            echo ".NET SDK installed successfully (version: $INSTALLED_VERSION)"
         else
-            echo "Error: Could not install .NET SDK using dotnet-install script"
-            echo ""
-            echo "Please install manually:"
-            echo "1. Visit: https://dotnet.microsoft.com/download/dotnet/9.0"
-            echo "2. Or run manually:"
-            echo "   curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version latest --channel 9.0"
-            exit 1
+            echo "Warning: .NET SDK installed but version check failed"
+            echo "Location: $DOTNET_INSTALL_DIR/dotnet"
         fi
+    else
+        echo "Error: .NET SDK installation failed"
+        echo ""
+        echo "Please try manual installation:"
+        echo "  curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version latest --channel 9.0"
+        echo "  sudo ln -sf /usr/share/dotnet/dotnet /usr/local/bin/dotnet"
+        exit 1
     fi
 else
-    DOTNET_VERSION=$(dotnet --version)
+    DOTNET_VERSION=$(dotnet --version 2>/dev/null || echo "unknown")
     echo ".NET SDK is already installed: $DOTNET_VERSION"
-    echo "Checking installed SDKs..."
-    dotnet --list-sdks
-
-    if ! dotnet --list-sdks | grep -q "9.0"; then
-        echo ""
-        echo "Warning: .NET SDK 9.0 not found in installed SDKs"
-        echo "Current runtime version: $DOTNET_VERSION"
-        echo ""
-        echo "To install .NET SDK 9.0, you can:"
-        echo "1. Run: sudo apt-get install -y dotnet-sdk-9.0"
-        echo "2. Or use: curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version 9.0.0 --channel 9.0"
-    else
-        echo ".NET SDK 9.0 is already installed"
+    if command -v dotnet &> /dev/null && dotnet --list-sdks > /dev/null 2>&1; then
+        echo "Checking installed SDKs..."
+        dotnet --list-sdks
+        if ! dotnet --list-sdks | grep -q "9.0"; then
+            echo ""
+            echo "Note: .NET SDK 9.0 not found in installed SDKs"
+        else
+            echo ".NET SDK 9.0 is already installed"
+        fi
     fi
 fi
 
