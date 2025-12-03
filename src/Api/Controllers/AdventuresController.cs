@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using Api.Contracts.Adventure;
 using Api.Contracts.Responses;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
@@ -16,11 +15,11 @@ public class AdventuresController : ControllerBase
     private static readonly DateTimeOffset _leftSearchBoarder = new( 2025, 12, 10, 0, 0, 0, TimeSpan.Zero );
     private static readonly DateTimeOffset _rightSearchBoarder = new( 2026, 1, 1, 0, 0, 0, TimeSpan.Zero );
 
-    private readonly DailyMessageProvider _dailyMessageProvider;
+    private readonly DailyAdventureProvider _dailyAdventureProvider;
 
     public AdventuresController()
     {
-        _dailyMessageProvider = new DailyMessageProvider();
+        _dailyAdventureProvider = new DailyAdventureProvider();
     }
 
     [HttpGet( "" )]
@@ -80,8 +79,8 @@ public class AdventuresController : ControllerBase
             return BadRequest( response );
         }
 
-        string? dailyMessage = _dailyMessageProvider.GetMessageForDate( searchDateTimeOffset );
-        if ( string.IsNullOrWhiteSpace( dailyMessage ) )
+        Adventure? domainAdventure = _dailyAdventureProvider.GetAdventureForDate( searchDateTimeOffset );
+        if ( domainAdventure is null )
         {
             const string msgTemplate = "Requested date {0} does not have mapped task, please contact hr.";
             string msg = string.Format( msgTemplate, searchDateTime.ToString( "yyyy-MM-dd" ) );
@@ -91,8 +90,8 @@ public class AdventuresController : ControllerBase
             return StatusCode( ( int )HttpStatusCode.InternalServerError, response );
         }
 
-        Adventure adventure = new( dailyMessage );
-        Response<Adventure> dailyMessageResponse = new( adventure );
+        Contracts.Adventures.Adventure adventure = new( domainAdventure.Message, domainAdventure.Title );
+        Response<Contracts.Adventures.Adventure> dailyMessageResponse = new( adventure );
 
         return Ok( dailyMessageResponse );
     }

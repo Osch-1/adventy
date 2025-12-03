@@ -183,7 +183,10 @@ function App() {
       const data = await response.json()
 
       if (response.ok && data.data) {
-        setAdventure(data.data.message)
+        setAdventure({
+          message: data.data.message,
+          title: data.data.title
+        })
       } else {
         // Handle backend errors with Russian messages
         const errorMessage = getErrorMessage(data.errors?.[0])
@@ -202,21 +205,6 @@ function App() {
     setError(null)
   }
 
-  // Fun phrases for today's adventure title
-  const getAdventureTitle = () => {
-    const phrases = [
-      '🎯 Задание на сегодня',
-      '✨ Твое приключение',
-      '🎄 Новогоднее задание',
-      '🌟 Сегодняшний квест',
-      '🎁 Задание дня',
-      '❄️ Зимнее приключение',
-      '🎊 Твоя миссия',
-      '🎈 Задание для тебя'
-    ]
-    const randomIndex = Math.floor(Math.random() * phrases.length)
-    return phrases[randomIndex]
-  }
 
   const [showInfoPopup, setShowInfoPopup] = useState(false)
 
@@ -296,7 +284,8 @@ function App() {
       {selectedDate && (
         <AdventureCard
           date={selectedDate}
-          adventure={adventure}
+          adventure={adventure?.message}
+          adventureTitle={adventure?.title}
           loading={loading}
           error={error}
           dateInfo={dates.find(d =>
@@ -304,7 +293,6 @@ function App() {
             d.date.getUTCMonth() === selectedDate.getUTCMonth() &&
             d.date.getUTCDate() === selectedDate.getUTCDate()
           )}
-          adventureTitle={getAdventureTitle()}
           onClose={handleClose}
         />
       )}

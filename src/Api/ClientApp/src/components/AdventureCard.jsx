@@ -133,7 +133,7 @@ function AdventureCard({ date, adventure, loading, error, dateInfo, adventureTit
                 {!loading && !error && adventure && (
                   <div className="adventure-content">
                     <div className="adventure-content-header">
-                      <h2>{isToday ? (adventureTitle || '🎯 Задание на сегодня') : 'Приключение'}</h2>
+                      <h2>{adventureTitle || (isToday ? '🎯 Задание на сегодня' : 'Приключение')}</h2>
                       <button
                         className="adventure-info-icon"
                         onClick={(e) => {
