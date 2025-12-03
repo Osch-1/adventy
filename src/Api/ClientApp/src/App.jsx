@@ -51,22 +51,17 @@ function App() {
   const [error, setError] = useState(null)
   const [skipSecrets, setSkipSecrets] = useState({
     first: null,
-    second: null,
-    third: null
+    second: null
   })
-  const [showPast, setShowPast] = useState(false)
 
-  // Read query parameters for skip validation secrets and showPast flag
-  // Using generic names (first, second, third) to hide actual header names from users
+  // Read query parameters for skip validation secrets
+  // Using generic names (first, second) to hide actual header names from users
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     setSkipSecrets({
       first: params.get('first') || null,
-      second: params.get('second') || null,
-      third: params.get('third') || null
+      second: params.get('second') || null
     })
-    // showPast flag: if set to 'true', show past dates
-    setShowPast(params.get('showPast') === 'true')
   }, [])
 
   // Generate dates from December 10, 2025 to December 31, 2025
@@ -139,16 +134,6 @@ function App() {
     return dateArray
   }, [])
 
-  // Filter dates: hide past dates unless showPast flag is set to true
-  const visibleDates = useMemo(() => {
-    if (showPast) {
-      // If showPast flag is true, show all dates including past ones
-      return dates
-    }
-    // Otherwise, filter out past dates
-    return dates.filter(dateInfo => !dateInfo.isPast)
-  }, [dates, showPast])
-
   const handleCardClick = async (dateInfo) => {
     // Compare dates by UTC date components to handle timezone differences
     const compareDates = (date1, date2) => {
@@ -168,58 +153,46 @@ function App() {
     setSelectedDate(dateInfo.date)
     setError(null)
 
-    // Fetch adventure if it's today, or if skip secrets are provided (for testing past/future dates)
-    const shouldFetchAdventure = dateInfo.isToday ||
-      skipSecrets.first ||
-      skipSecrets.second ||
-      skipSecrets.third
+    // Always fetch adventure for any date
+    setLoading(true)
+    try {
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+      // Format date using UTC components to ensure consistency worldwide
+      const year = dateInfo.date.getUTCFullYear()
+      const month = String(dateInfo.date.getUTCMonth() + 1).padStart(2, '0')
+      const day = String(dateInfo.date.getUTCDate()).padStart(2, '0')
+      const dateStr = `${year}-${month}-${day}`
 
-    if (shouldFetchAdventure) {
-      setLoading(true)
-      try {
-        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
-        // Format date using UTC components to ensure consistency worldwide
-        const year = dateInfo.date.getUTCFullYear()
-        const month = String(dateInfo.date.getUTCMonth() + 1).padStart(2, '0')
-        const day = String(dateInfo.date.getUTCDate()).padStart(2, '0')
-        const dateStr = `${year}-${month}-${day}`
-
-        // Build headers with skip validation secrets if provided
-        // Map generic parameter names to actual header names
-        const headers = {
-          'X-Timezone': timezone
-        }
-
-        if (skipSecrets.first) {
-          headers['Adventy-SkipSearchDateInRangeValidationSecret'] = skipSecrets.first
-        }
-        if (skipSecrets.second) {
-          headers['Adventy-SkipSearchDateHasNotAppearedValidationSecret'] = skipSecrets.second
-        }
-        if (skipSecrets.third) {
-          headers['Adventy-SkipSearchDatePassedValidationSecret'] = skipSecrets.third
-        }
-
-        const response = await fetch(`/api/Adventures?searchDateTime=${dateStr}T00:00:00`, {
-          headers
-        })
-
-        const data = await response.json()
-
-        if (response.ok && data.data) {
-          setAdventure(data.data.message)
-        } else {
-          // Handle backend errors with Russian messages
-          const errorMessage = getErrorMessage(data.errors?.[0])
-          setError(errorMessage)
-        }
-      } catch (err) {
-        setError('⚠️ Неожиданная ошибка. Пожалуйста, обратитесь к администратору.')
-      } finally {
-        setLoading(false)
+      // Build headers with skip validation secrets if provided (for testing future dates and dates outside range)
+      // Map generic parameter names to actual header names
+      const headers = {
+        'X-Timezone': timezone
       }
-    } else {
-      setAdventure(null)
+
+      if (skipSecrets.first) {
+        headers['Adventy-SkipSearchDateInRangeValidationSecret'] = skipSecrets.first
+      }
+      if (skipSecrets.second) {
+        headers['Adventy-SkipSearchDateHasNotAppearedValidationSecret'] = skipSecrets.second
+      }
+
+      const response = await fetch(`/api/Adventures?searchDateTime=${dateStr}T00:00:00`, {
+        headers
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.data) {
+        setAdventure(data.data.message)
+      } else {
+        // Handle backend errors with Russian messages
+        const errorMessage = getErrorMessage(data.errors?.[0])
+        setError(errorMessage)
+      }
+    } catch (err) {
+      setError('⚠️ Неожиданная ошибка. Пожалуйста, обратитесь к администратору.')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -308,7 +281,7 @@ function App() {
         </div>
       </div>
       <div className="cards-container">
-        {visibleDates.map((dateInfo, index) => (
+        {dates.map((dateInfo, index) => (
           <DateCard
             key={index}
             dateInfo={dateInfo}
@@ -326,7 +299,7 @@ function App() {
           adventure={adventure}
           loading={loading}
           error={error}
-          dateInfo={visibleDates.find(d =>
+          dateInfo={dates.find(d =>
             d.date.getUTCFullYear() === selectedDate.getUTCFullYear() &&
             d.date.getUTCMonth() === selectedDate.getUTCMonth() &&
             d.date.getUTCDate() === selectedDate.getUTCDate()

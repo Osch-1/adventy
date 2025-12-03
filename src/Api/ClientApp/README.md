@@ -54,21 +54,22 @@ See `docs/nginx.conf.example` in the root folder for a sample nginx configuratio
 For testing purposes, you can bypass date validation by providing query parameters when opening the page:
 
 ```
-?first=SECRET&second=SECRET&third=SECRET
+?first=SECRET&second=SECRET
 ```
 
 Example:
 ```
-http://localhost:5173/?first=CggAEEUYFhgeGDkyCggBEAAYgA_secret_to_skip_date_in_range&third=AYgAQYogQyCggDEAAYogQYiQUyC_secret_to_skip_date_passed
+http://localhost:5173/?first=CggAEEUYFhgeGDkyCggBEAAYgA_secret_to_skip_date_in_range&second=EgZjaHJvbWUyCggAE_secret_to_skip_date_has_not_appeared
 ```
 
 **Parameter mapping:**
 - `first` - Skips date range validation
 - `second` - Skips "date has not appeared" validation
-- `third` - Skips "date passed" validation
+
+**Note:** Past dates can be viewed without any parameters - they are accessible to all users.
 
 This allows you to:
-- View adventures for past dates (with `third`)
+- View adventures for past dates (no parameters needed)
 - View adventures for future dates (with `second`)
 - View adventures outside the date range (with `first`)
 
