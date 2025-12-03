@@ -44,6 +44,43 @@ fi
 echo "Prerequisites check passed"
 echo ""
 
+# Cleanup build folders
+echo "=========================================="
+echo "Cleaning Build Folders"
+echo "=========================================="
+
+# Clean backend publish folder
+if [ -d "$BUILD_OUTPUT_DIR" ]; then
+    echo "Cleaning backend build output: $BUILD_OUTPUT_DIR"
+    rm -rf "$BUILD_OUTPUT_DIR"
+fi
+
+# Clean frontend build output
+if [ -d "$CLIENT_APP_PATH/wwwroot" ]; then
+    echo "Cleaning frontend build output: $CLIENT_APP_PATH/wwwroot"
+    rm -rf "$CLIENT_APP_PATH/wwwroot"
+fi
+
+# Clean .NET build artifacts (bin and obj folders)
+if [ -d "$API_PATH/bin" ]; then
+    echo "Cleaning .NET bin folder: $API_PATH/bin"
+    rm -rf "$API_PATH/bin"
+fi
+
+if [ -d "$API_PATH/obj" ]; then
+    echo "Cleaning .NET obj folder: $API_PATH/obj"
+    rm -rf "$API_PATH/obj"
+fi
+
+# Clean Vite cache
+if [ -d "$CLIENT_APP_PATH/node_modules/.vite" ]; then
+    echo "Cleaning Vite cache: $CLIENT_APP_PATH/node_modules/.vite"
+    rm -rf "$CLIENT_APP_PATH/node_modules/.vite"
+fi
+
+echo "Build folders cleaned"
+echo ""
+
 # Step 1: Build Frontend
 echo "=========================================="
 echo "Step 1: Building Frontend"

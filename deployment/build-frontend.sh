@@ -15,6 +15,24 @@ fi
 
 cd "$CLIENT_APP_PATH" || exit 1
 
+# Cleanup build folders
+echo "Cleaning build folders..."
+
+# Clean frontend build output
+if [ -d "wwwroot" ]; then
+    echo "Cleaning frontend build output: wwwroot"
+    rm -rf wwwroot
+fi
+
+# Clean Vite cache
+if [ -d "node_modules/.vite" ]; then
+    echo "Cleaning Vite cache: node_modules/.vite"
+    rm -rf node_modules/.vite
+fi
+
+echo "Build folders cleaned"
+echo ""
+
 # Check if node_modules exists, if not, run npm install
 if [ ! -d "node_modules" ]; then
     echo "Installing dependencies..."

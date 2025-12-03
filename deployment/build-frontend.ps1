@@ -15,6 +15,24 @@ if (-not (Test-Path $clientAppPath)) {
 Push-Location $clientAppPath
 
 try {
+    # Cleanup build folders
+    Write-Host "Cleaning build folders..." -ForegroundColor Yellow
+
+    # Clean frontend build output
+    if (Test-Path "wwwroot") {
+        Write-Host "Cleaning frontend build output: wwwroot" -ForegroundColor Yellow
+        Remove-Item -Recurse -Force "wwwroot"
+    }
+
+    # Clean Vite cache
+    if (Test-Path "node_modules\.vite") {
+        Write-Host "Cleaning Vite cache: node_modules\.vite" -ForegroundColor Yellow
+        Remove-Item -Recurse -Force "node_modules\.vite"
+    }
+
+    Write-Host "Build folders cleaned" -ForegroundColor Green
+    Write-Host ""
+
     # Check if node_modules exists, if not, run npm install
     if (-not (Test-Path "node_modules")) {
         Write-Host "Installing dependencies..." -ForegroundColor Yellow
