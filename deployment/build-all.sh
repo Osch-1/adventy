@@ -267,19 +267,76 @@ fi
 echo "Setting permissions..."
 chown -R www-data:www-data "$DEPLOY_PATH" 2>/dev/null || echo "Warning: Could not set ownership (may need sudo)"
 
+# Step 4: Install and restart service (idempotent)
+echo ""
+echo "=========================================="
+echo "Step 4: Managing Systemd Service"
+echo "=========================================="
+
+SERVICE_NAME="adventy.service"
+SERVICE_FILE="$REPO_ROOT/deployment/$SERVICE_NAME"
+SYSTEMD_SERVICE_PATH="/etc/systemd/system/$SERVICE_NAME"
+
+# Check if running with sudo (needed for service management)
+if [ "$EUID" -eq 0 ]; then
+    # Check if service file exists
+    if [ ! -f "$SERVICE_FILE" ]; then
+        echo "Warning: Service file not found at $SERVICE_FILE"
+        echo "Skipping service installation"
+    else
+        # Install or update service file
+        if [ ! -f "$SYSTEMD_SERVICE_PATH" ] || ! cmp -s "$SERVICE_FILE" "$SYSTEMD_SERVICE_PATH"; then
+            echo "Installing/updating systemd service..."
+            cp "$SERVICE_FILE" "$SYSTEMD_SERVICE_PATH"
+            systemctl daemon-reload
+            echo "Service file installed/updated"
+        else
+            echo "Service file is up to date"
+        fi
+        
+        # Ensure service is enabled
+        if ! systemctl is-enabled "$SERVICE_NAME" >/dev/null 2>&1; then
+            echo "Enabling service to start on boot..."
+            systemctl enable "$SERVICE_NAME"
+        else
+            echo "Service is already enabled"
+        fi
+        
+        # Restart the service (will start if not running)
+        echo "Restarting service..."
+        if systemctl is-active --quiet "$SERVICE_NAME"; then
+            systemctl restart "$SERVICE_NAME"
+            echo "Service restarted"
+        else
+            systemctl start "$SERVICE_NAME"
+            echo "Service started"
+        fi
+        
+        # Show service status
+        echo ""
+        echo "Service status:"
+        systemctl status "$SERVICE_NAME" --no-pager -l | head -n 5 || true
+    fi
+else
+    echo "Note: Not running as root, skipping service management"
+    echo "To install/restart the service, run:"
+    echo "  sudo ./deployment/manage-service.sh install"
+    echo "  sudo ./deployment/manage-service.sh restart"
+fi
+
 echo ""
 echo "=========================================="
 echo "Build and Deployment Complete!"
 echo "=========================================="
 echo "Application files copied to: $DEPLOY_PATH"
 echo ""
-echo "Next steps:"
-echo "1. Configure the application in: $DEPLOY_PATH/appsettings.json"
-echo "2. Install and configure the systemd service:"
-echo "   sudo cp deployment/adventy.service /etc/systemd/system/"
-echo "   sudo systemctl daemon-reload"
-echo "   sudo systemctl enable adventy.service"
-echo "   sudo systemctl start adventy.service"
-echo "3. Configure nginx using files in nginx/ folder"
+if [ "$EUID" -ne 0 ]; then
+    echo "Next steps:"
+    echo "1. Configure the application in: $DEPLOY_PATH/appsettings.json"
+    echo "2. Install and configure the systemd service:"
+    echo "   sudo ./deployment/manage-service.sh install"
+    echo "   sudo ./deployment/manage-service.sh restart"
+    echo "3. Configure nginx using: sudo ./deployment/deploy-nginx.sh"
+fi
 echo "=========================================="
 
