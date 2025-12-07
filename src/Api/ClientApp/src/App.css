@@ -11,9 +11,6 @@
   /* Let body handle scrolling for better iOS Safari compatibility */
   overflow-y: visible;
   -webkit-overflow-scrolling: touch;
-  /* Enable hardware acceleration for smooth scrolling */
-  transform: translateZ(0);
-  backface-visibility: hidden;
   box-sizing: border-box;
   position: relative;
 }
@@ -124,14 +121,11 @@
   gap: 20px;
   max-width: 1400px;
   margin: 0 auto;
-  /* Extra padding at bottom to ensure content can scroll all the way */
-  padding-bottom: max(60px, calc(40px + env(safe-area-inset-bottom, 0px)));
+  /* Extra padding at bottom to ensure content can scroll all the way - use fixed value to prevent layout shifts */
+  padding-bottom: 80px;
   /* Big screens: 4 rows with 4-4-4-3 cards distribution */
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-auto-rows: 1fr;
-  /* Optimize for smooth scrolling */
-  contain: layout style paint;
-  will-change: contents;
 }
 
 .cards-container.overlay-open {
@@ -153,8 +147,8 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
-    /* Extra padding at bottom to ensure content can scroll all the way */
-    padding-bottom: max(60px, calc(40px + env(safe-area-inset-bottom, 0px)));
+    /* Extra padding at bottom to ensure content can scroll all the way - use fixed value to prevent layout shifts */
+    padding-bottom: 80px;
     max-width: 100%;
   }
 
@@ -196,8 +190,8 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    /* Extra padding at bottom to ensure content can scroll all the way */
-    padding-bottom: max(60px, calc(40px + env(safe-area-inset-bottom, 0px)));
+    /* Extra padding at bottom to ensure content can scroll all the way - use fixed value to prevent layout shifts */
+    padding-bottom: 80px;
     max-width: 100%;
   }
 

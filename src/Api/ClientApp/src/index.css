@@ -40,9 +40,8 @@ body {
   /* Allow vertical scrolling */
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  /* Enable hardware acceleration for smooth scrolling */
-  transform: translateZ(0);
-  will-change: scroll-position;
+  /* Prevent scroll chaining and improve performance */
+  overscroll-behavior-y: contain;
   width: 100%;
   position: relative;
 }

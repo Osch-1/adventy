@@ -4,7 +4,7 @@
   border-radius: 20px;
   padding: 20px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   position: relative;
   overflow: hidden;
@@ -12,10 +12,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Optimize for smooth scrolling */
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  will-change: transform;
 }
 
 .date-card::before {
