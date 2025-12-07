@@ -63,7 +63,7 @@ Your application should now be accessible via HTTP on port 80 (and HTTPS on port
 
 ## Production Server
 
-**Production Domain:** http://2966415-bp32333.twc1.net/  
+**Production Domain:** http://adventy.ru/  
 **Production IP:** http://81.17.154.37/
 
 The application is deployed and accessible at both the domain and IP address. Use the domain URL for production access.
@@ -280,7 +280,7 @@ sudo nano /etc/nginx/sites-available/adventy
 ```
 
 Update:
-- `server_name`: Your domain name (currently configured for `2966415-bp32333.twc1.net` and IP access via `_`)
+- `server_name`: Your domain name (currently configured for `adventy.ru` and `www.adventy.ru` with IP access via `_`)
 - `root`: Deployment path (default: `/opt/adventy/wwwroot`)
 - `upstream server`: Backend port if different from 5000
 - `ssl_certificate` paths: If using HTTPS (see [SSL_CERTIFICATES.md](SSL_CERTIFICATES.md))

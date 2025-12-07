@@ -17,12 +17,12 @@ This guide explains how to manage domain configuration for the Adventy applicati
 
 The Adventy application is configured to work with domain names. This allows you to access the application using a friendly domain name instead of just an IP address.
 
-**Current Domain:** `2966415-bp32333.twc1.net`
+**Current Domain:** `adventy.ru`
 
 ## Current Domain Configuration
 
 The application is configured to accept requests from:
-- **Primary Domain:** `2966415-bp32333.twc1.net`
+- **Primary Domain:** `adventy.ru`
 - **IP Address:** Also accepts requests by IP address (via `_` in server_name)
 
 ### Nginx Configuration
@@ -30,7 +30,7 @@ The application is configured to accept requests from:
 The domain is configured in `/etc/nginx/sites-available/adventy`:
 
 ```nginx
-server_name 2966415-bp32333.twc1.net _;
+server_name adventy.ru _;
 ```
 
 The `_` allows the server to accept requests by IP address as well as the domain name.
@@ -47,7 +47,7 @@ Create an A record pointing your domain to your server's IP address:
 
 ```
 Type: A
-Name: @ (or 2966415-bp32333)
+Name: @ (or leave blank for root domain)
 Value: YOUR_SERVER_IP
 TTL: 3600 (or your preference)
 ```
@@ -66,7 +66,7 @@ If your server has an IPv6 address:
 
 ```
 Type: AAAA
-Name: @ (or 2966415-bp32333)
+Name: @ (or leave blank for root domain)
 Value: YOUR_SERVER_IPv6
 TTL: 3600
 ```
@@ -78,20 +78,20 @@ After creating DNS records:
 2. **Check DNS propagation** - Use tools like:
    - https://dnschecker.org/
    - https://www.whatsmydns.net/
-   - `dig 2966415-bp32333.twc1.net` (from command line)
-   - `nslookup 2966415-bp32333.twc1.net` (from command line)
+   - `dig adventy.ru` (from command line)
+   - `nslookup adventy.ru` (from command line)
 
 ### Verify DNS Configuration
 
 ```bash
 # Check A record
-dig +short 2966415-bp32333.twc1.net A
+dig +short adventy.ru A
 
 # Check all records
-dig 2966415-bp32333.twc1.net ANY
+dig adventy.ru ANY
 
 # Check from different locations
-nslookup 2966415-bp32333.twc1.net 8.8.8.8
+nslookup adventy.ru 8.8.8.8
 ```
 
 The output should show your server's IP address.
@@ -102,16 +102,16 @@ The output should show your server's IP address.
 
 1. **HTTP Access:**
 ```bash
-curl -I http://2966415-bp32333.twc1.net
+curl -I http://adventy.ru
 ```
 
 2. **HTTPS Access (if SSL configured):**
 ```bash
-curl -I https://2966415-bp32333.twc1.net
+curl -I https://adventy.ru
 ```
 
 3. **From Browser:**
-   - Open `http://2966415-bp32333.twc1.net` in your browser
+   - Open `http://adventy.ru` in your browser
    - Should load the Adventy application
 
 ### Check Nginx Logs
@@ -146,7 +146,7 @@ Update the `server_name` directive:
 
 ```nginx
 # Old
-server_name 2966415-bp32333.twc1.net _;
+server_name adventy.ru _;
 
 # New
 server_name yournewdomain.com www.yournewdomain.com _;
@@ -158,7 +158,7 @@ If you have an SSL certificate, you'll need to obtain a new one for the new doma
 
 ```bash
 # Remove old certificate (optional)
-sudo certbot delete --cert-name 2966415-bp32333.twc1.net
+sudo certbot delete --cert-name adventy.ru
 
 # Obtain new certificate
 sudo certbot --nginx -d yournewdomain.com -d www.yournewdomain.com
@@ -187,7 +187,7 @@ You can configure nginx to accept multiple domains:
 Edit `/etc/nginx/sites-available/adventy`:
 
 ```nginx
-server_name 2966415-bp32333.twc1.net example.com www.example.com _;
+server_name adventy.ru example.com www.example.com _;
 ```
 
 ### SSL Certificates for Multiple Domains
@@ -195,14 +195,14 @@ server_name 2966415-bp32333.twc1.net example.com www.example.com _;
 For Let's Encrypt, include all domains:
 
 ```bash
-sudo certbot --nginx -d 2966415-bp32333.twc1.net -d example.com -d www.example.com
+sudo certbot --nginx -d adventy.ru -d example.com -d www.example.com
 ```
 
 This creates a single certificate covering all domains.
 
 ## Subdomain Configuration
 
-To add a subdomain (e.g., `api.2966415-bp32333.twc1.net`):
+To add a subdomain (e.g., `api.adventy.ru`):
 
 ### Step 1: Create DNS Record
 
@@ -226,7 +226,7 @@ sudo nano /etc/nginx/sites-available/adventy-api
 
 Update server_name:
 ```nginx
-server_name api.2966415-bp32333.twc1.net;
+server_name api.adventy.ru;
 ```
 
 Enable the site:
@@ -238,7 +238,7 @@ sudo nginx -t && sudo systemctl reload nginx
 ### Step 3: SSL Certificate for Subdomain
 
 ```bash
-sudo certbot --nginx -d api.2966415-bp32333.twc1.net
+sudo certbot --nginx -d api.adventy.ru
 ```
 
 ## Troubleshooting
@@ -250,11 +250,11 @@ sudo certbot --nginx -d api.2966415-bp32333.twc1.net
 **Check:**
 ```bash
 # Check DNS resolution
-dig 2966415-bp32333.twc1.net
+dig adventy.ru
 
 # Check from different DNS servers
-nslookup 2966415-bp32333.twc1.net 8.8.8.8
-nslookup 2966415-bp32333.twc1.net 1.1.1.1
+nslookup adventy.ru 8.8.8.8
+nslookup adventy.ru 1.1.1.1
 ```
 
 **Solutions:**
@@ -270,7 +270,7 @@ nslookup 2966415-bp32333.twc1.net 1.1.1.1
 **Check:**
 ```bash
 # Test HTTP connection
-curl -v http://2966415-bp32333.twc1.net
+curl -v http://adventy.ru
 
 # Check nginx is running
 sudo systemctl status nginx
@@ -295,7 +295,7 @@ sudo tail -f /var/log/nginx/error.log
 **Check:**
 ```bash
 # Check which nginx site is handling the request
-sudo nginx -T | grep -A 5 "server_name.*2966415-bp32333"
+sudo nginx -T | grep -A 5 "server_name.*adventy"
 
 # Check for conflicting configurations
 ls -la /etc/nginx/sites-enabled/
@@ -313,11 +313,11 @@ ls -la /etc/nginx/sites-enabled/
 **Check:**
 ```bash
 # Check certificate domain
-echo | openssl s_client -servername 2966415-bp32333.twc1.net -connect 2966415-bp32333.twc1.net:443 2>/dev/null | openssl x509 -noout -subject
+echo | openssl s_client -servername adventy.ru -connect adventy.ru:443 2>/dev/null | openssl x509 -noout -subject
 ```
 
 **Solutions:**
-- Obtain certificate for correct domain: `sudo certbot --nginx -d 2966415-bp32333.twc1.net`
+- Obtain certificate for correct domain: `sudo certbot --nginx -d adventy.ru`
 - Update nginx configuration with correct certificate paths
 - Reload nginx after changes
 
@@ -328,7 +328,7 @@ echo | openssl s_client -servername 2966415-bp32333.twc1.net -connect 2966415-bp
 This is normal if you remove `_` from server_name. To allow both:
 
 ```nginx
-server_name 2966415-bp32333.twc1.net _;
+server_name adventy.ru _;
 ```
 
 The `_` is a catch-all that allows requests by IP address.
@@ -372,12 +372,12 @@ Common DNS providers and how to add A records:
 
 ```bash
 # Check DNS resolution
-dig 2966415-bp32333.twc1.net
-nslookup 2966415-bp32333.twc1.net
+dig adventy.ru
+nslookup adventy.ru
 
 # Test domain access
-curl -I http://2966415-bp32333.twc1.net
-curl -I https://2966415-bp32333.twc1.net
+curl -I http://adventy.ru
+curl -I https://adventy.ru
 
 # Check nginx configuration
 sudo nginx -t
@@ -392,7 +392,7 @@ sudo nano /etc/nginx/sites-available/adventy
 sudo nginx -t && sudo systemctl reload nginx
 
 # Get SSL certificate for domain
-sudo certbot --nginx -d 2966415-bp32333.twc1.net
+sudo certbot --nginx -d adventy.ru
 ```
 
 ## Additional Resources

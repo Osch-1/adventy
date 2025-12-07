@@ -16,7 +16,7 @@ This guide explains how to work with SSL certificates for the Adventy applicatio
 
 SSL (Secure Sockets Layer) certificates enable HTTPS encryption for your web application. They ensure that data transmitted between clients and your server is encrypted and authenticated.
 
-**Current Domain:** `2966415-bp32333.twc1.net`
+**Current Domain:** `adventy.ru`
 
 ## Certificate Types
 
@@ -62,10 +62,10 @@ sudo apt-get install certbot python3-certbot-nginx
 
 #### Step 2: Obtain Certificate
 
-For your domain `2966415-bp32333.twc1.net`:
+For your domain `adventy.ru`:
 
 ```bash
-sudo certbot --nginx -d 2966415-bp32333.twc1.net
+sudo certbot --nginx -d adventy.ru
 ```
 
 Certbot will:
@@ -81,7 +81,7 @@ Certbot will:
 sudo certbot certificates
 
 # Test HTTPS connection
-curl -I https://2966415-bp32333.twc1.net
+curl -I https://adventy.ru
 ```
 
 #### Step 4: Test Auto-Renewal
@@ -97,7 +97,7 @@ sudo certbot renew --dry-run
 
 Let's Encrypt certificates are stored at:
 ```
-/etc/letsencrypt/live/2966415-bp32333.twc1.net/
+/etc/letsencrypt/live/adventy.ru/
 ├── fullchain.pem    # Certificate + chain (use this for nginx)
 ├── privkey.pem      # Private key (use this for nginx)
 ├── cert.pem         # Certificate only
@@ -109,8 +109,8 @@ Let's Encrypt certificates are stored at:
 After running certbot, your nginx configuration will be automatically updated. The HTTPS server block will be uncommented and configured with:
 
 ```nginx
-ssl_certificate /etc/letsencrypt/live/2966415-bp32333.twc1.net/fullchain.pem;
-ssl_certificate_key /etc/letsencrypt/live/2966415-bp32333.twc1.net/privkey.pem;
+ssl_certificate /etc/letsencrypt/live/adventy.ru/fullchain.pem;
+ssl_certificate_key /etc/letsencrypt/live/adventy.ru/privkey.pem;
 ```
 
 ### Automatic Renewal
@@ -132,7 +132,7 @@ Renewal happens automatically, but you can manually renew:
 sudo certbot renew
 
 # Renew specific certificate
-sudo certbot renew --cert-name 2966415-bp32333.twc1.net
+sudo certbot renew --cert-name adventy.ru
 ```
 
 After renewal, nginx must be reloaded. Certbot handles this automatically via a renewal hook.
@@ -149,13 +149,13 @@ sudo mkdir -p /etc/nginx/ssl
 
 # Generate certificate (valid for 1 year)
 sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-  -keyout /etc/nginx/ssl/2966415-bp32333.twc1.net.key \
-  -out /etc/nginx/ssl/2966415-bp32333.twc1.net.crt \
-  -subj "/C=US/ST=State/L=City/O=Organization/CN=2966415-bp32333.twc1.net"
+  -keyout /etc/nginx/ssl/adventy.ru.key \
+  -out /etc/nginx/ssl/adventy.ru.crt \
+  -subj "/C=US/ST=State/L=City/O=Organization/CN=adventy.ru"
 
 # Set proper permissions
-sudo chmod 600 /etc/nginx/ssl/2966415-bp32333.twc1.net.key
-sudo chmod 644 /etc/nginx/ssl/2966415-bp32333.twc1.net.crt
+sudo chmod 600 /etc/nginx/ssl/adventy.ru.key
+sudo chmod 644 /etc/nginx/ssl/adventy.ru.crt
 ```
 
 ### Configure Nginx
@@ -163,8 +163,8 @@ sudo chmod 644 /etc/nginx/ssl/2966415-bp32333.twc1.net.crt
 Edit `/etc/nginx/sites-available/adventy` and uncomment the HTTPS server block, then update:
 
 ```nginx
-ssl_certificate /etc/nginx/ssl/2966415-bp32333.twc1.net.crt;
-ssl_certificate_key /etc/nginx/ssl/2966415-bp32333.twc1.net.key;
+ssl_certificate /etc/nginx/ssl/adventy.ru.crt;
+ssl_certificate_key /etc/nginx/ssl/adventy.ru.key;
 ```
 
 Then test and reload:
@@ -180,10 +180,10 @@ View certificate information:
 
 ```bash
 # View certificate details
-openssl x509 -in /etc/nginx/ssl/2966415-bp32333.twc1.net.crt -text -noout
+openssl x509 -in /etc/nginx/ssl/adventy.ru.crt -text -noout
 
 # Check expiration date
-openssl x509 -in /etc/nginx/ssl/2966415-bp32333.twc1.net.crt -noout -enddate
+openssl x509 -in /etc/nginx/ssl/adventy.ru.crt -noout -enddate
 ```
 
 ## Commercial Certificates
@@ -197,9 +197,9 @@ If you purchase a certificate from a commercial CA (e.g., DigiCert, GlobalSign, 
 
 ```bash
 sudo openssl req -new -newkey rsa:2048 -nodes \
-  -keyout /etc/nginx/ssl/2966415-bp32333.twc1.net.key \
-  -out /etc/nginx/ssl/2966415-bp32333.twc1.net.csr \
-  -subj "/C=US/ST=State/L=City/O=Organization/CN=2966415-bp32333.twc1.net"
+  -keyout /etc/nginx/ssl/adventy.ru.key \
+  -out /etc/nginx/ssl/adventy.ru.csr \
+  -subj "/C=US/ST=State/L=City/O=Organization/CN=adventy.ru"
 ```
 
 3. **Submit CSR** to your CA (they'll provide certificate files)
@@ -227,14 +227,14 @@ Generate a new certificate before expiration:
 
 ```bash
 # Backup old certificate
-sudo cp /etc/nginx/ssl/2966415-bp32333.twc1.net.crt /etc/nginx/ssl/2966415-bp32333.twc1.net.crt.backup
-sudo cp /etc/nginx/ssl/2966415-bp32333.twc1.net.key /etc/nginx/ssl/2966415-bp32333.twc1.net.key.backup
+sudo cp /etc/nginx/ssl/adventy.ru.crt /etc/nginx/ssl/adventy.ru.crt.backup
+sudo cp /etc/nginx/ssl/adventy.ru.key /etc/nginx/ssl/adventy.ru.key.backup
 
 # Generate new certificate
 sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-  -keyout /etc/nginx/ssl/2966415-bp32333.twc1.net.key \
-  -out /etc/nginx/ssl/2966415-bp32333.twc1.net.crt \
-  -subj "/C=US/ST=State/L=City/O=Organization/CN=2966415-bp32333.twc1.net"
+  -keyout /etc/nginx/ssl/adventy.ru.key \
+  -out /etc/nginx/ssl/adventy.ru.crt \
+  -subj "/C=US/ST=State/L=City/O=Organization/CN=adventy.ru"
 
 # Reload nginx
 sudo nginx -t && sudo systemctl reload nginx
@@ -247,10 +247,10 @@ sudo nginx -t && sudo systemctl reload nginx
 sudo certbot certificates
 
 # Self-signed certificate
-openssl x509 -in /etc/nginx/ssl/2966415-bp32333.twc1.net.crt -noout -enddate
+openssl x509 -in /etc/nginx/ssl/adventy.ru.crt -noout -enddate
 
 # Check via HTTPS
-echo | openssl s_client -servername 2966415-bp32333.twc1.net -connect 2966415-bp32333.twc1.net:443 2>/dev/null | openssl x509 -noout -enddate
+echo | openssl s_client -servername adventy.ru -connect adventy.ru:443 2>/dev/null | openssl x509 -noout -enddate
 ```
 
 ## Troubleshooting
@@ -286,7 +286,7 @@ sudo nginx -t
 sudo tail -f /var/log/nginx/error.log
 
 # Verify certificate files exist
-sudo ls -la /etc/letsencrypt/live/2966415-bp32333.twc1.net/
+sudo ls -la /etc/letsencrypt/live/adventy.ru/
 ```
 
 **Common issues:**
@@ -355,7 +355,7 @@ sudo journalctl -u certbot.timer -n 50
 
 ```bash
 # Install Let's Encrypt certificate
-sudo certbot --nginx -d 2966415-bp32333.twc1.net
+sudo certbot --nginx -d adventy.ru
 
 # Renew certificate
 sudo certbot renew
@@ -367,8 +367,8 @@ sudo certbot certificates
 sudo certbot renew --dry-run
 
 # View certificate expiration
-echo | openssl s_client -servername 2966415-bp32333.twc1.net -connect 2966415-bp32333.twc1.net:443 2>/dev/null | openssl x509 -noout -enddate
+echo | openssl s_client -servername adventy.ru -connect adventy.ru:443 2>/dev/null | openssl x509 -noout -enddate
 
 # Test HTTPS connection
-curl -I https://2966415-bp32333.twc1.net
+curl -I https://adventy.ru
 ```
