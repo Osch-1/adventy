@@ -112,8 +112,8 @@ function AdventureCard({ date, adventure, loading, error, dateInfo, adventureTit
     }
   }
 
-  const handleOverlayTouchStart = (e) => {
-    // Prevent touch events from bubbling to date cards underneath on iOS Safari
+  const handleOverlayTouchEnd = (e) => {
+    // iOS Safari: Use touchEnd instead of touchStart to prevent ghost clicks
     if (e.target === e.currentTarget) {
       e.preventDefault()
       e.stopPropagation()
@@ -125,21 +125,30 @@ function AdventureCard({ date, adventure, loading, error, dateInfo, adventureTit
     <div 
       className="adventure-overlay" 
       onClick={handleOverlayClick}
-      onTouchStart={handleOverlayTouchStart}
+      onTouchEnd={handleOverlayTouchEnd}
     >
       <div
         className="adventure-card"
-        onClick={(e) => e.stopPropagation()}
-        onTouchStart={(e) => e.stopPropagation()}
+        onClick={(e) => {
+          e.stopPropagation()
+          e.preventDefault()
+        }}
+        onTouchEnd={(e) => {
+          e.stopPropagation()
+          e.preventDefault()
+        }}
       >
         <button 
           className="adventure-close" 
           onClick={(e) => {
             e.stopPropagation()
+            e.preventDefault()
             onClose()
           }}
-          onTouchStart={(e) => {
+          onTouchEnd={(e) => {
             e.stopPropagation()
+            e.preventDefault()
+            onClose()
           }}
         >
           ×
@@ -171,9 +180,14 @@ function AdventureCard({ date, adventure, loading, error, dateInfo, adventureTit
                         className="adventure-info-icon"
                         onClick={(e) => {
                           e.stopPropagation()
+                          e.preventDefault()
                           setShowInfoPopup(!showInfoPopup)
                         }}
-                        onTouchStart={(e) => e.stopPropagation()}
+                        onTouchEnd={(e) => {
+                          e.stopPropagation()
+                          e.preventDefault()
+                          setShowInfoPopup(!showInfoPopup)
+                        }}
                         aria-label="Информация"
                       >
                         ℹ️
@@ -181,17 +195,28 @@ function AdventureCard({ date, adventure, loading, error, dateInfo, adventureTit
                       {showInfoPopup && (
                         <div
                           className="adventure-info-popup"
-                          onClick={(e) => e.stopPropagation()}
-                          onTouchStart={(e) => e.stopPropagation()}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            e.preventDefault()
+                          }}
+                          onTouchEnd={(e) => {
+                            e.stopPropagation()
+                            e.preventDefault()
+                          }}
                         >
                           <div className="adventure-info-popup-content">
                             <button
                               className="adventure-info-popup-close"
                               onClick={(e) => {
                                 e.stopPropagation()
+                                e.preventDefault()
                                 setShowInfoPopup(false)
                               }}
-                              onTouchStart={(e) => e.stopPropagation()}
+                              onTouchEnd={(e) => {
+                                e.stopPropagation()
+                                e.preventDefault()
+                                setShowInfoPopup(false)
+                              }}
                             >
                               ×
                             </button>

@@ -19,10 +19,31 @@ function DateCard({ dateInfo, isSelected, onClick }) {
     })
   }
 
+  const handleClick = (e) => {
+    // Prevent clicks if parent container has overlay-open class (iOS Safari fix)
+    const cardsContainer = e.currentTarget.closest('.cards-container')
+    if (cardsContainer && cardsContainer.classList.contains('overlay-open')) {
+      e.preventDefault()
+      e.stopPropagation()
+      return
+    }
+    onClick()
+  }
+
   return (
     <div
       className={`date-card ${isSelected ? 'selected' : ''} ${dateInfo.isToday ? 'today' : ''}`}
-      onClick={onClick}
+      onClick={handleClick}
+      onTouchEnd={(e) => {
+        // iOS Safari: Check if overlay is open before allowing touch
+        const cardsContainer = e.currentTarget.closest('.cards-container')
+        if (cardsContainer && cardsContainer.classList.contains('overlay-open')) {
+          e.preventDefault()
+          e.stopPropagation()
+          return
+        }
+        handleClick(e)
+      }}
     >
       <div className="date-card-content">
         <div className="date-card-day">{formatDay(dateInfo.date)}</div>
