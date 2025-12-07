@@ -26,28 +26,29 @@ function AdventureCard({ date, adventure, loading, error, dateInfo, adventureTit
     const appContainer = document.querySelector('.app')
     const root = document.documentElement
 
-    // Save current scroll positions
+    // Save current scroll positions BEFORE any changes
     const scrollY = appContainer ? appContainer.scrollTop : window.scrollY
     const scrollX = window.scrollX
+    const bodyScrollY = window.scrollY
 
-    // Prevent all scrolling on body and html
-    document.body.style.position = 'fixed'
-    document.body.style.top = `-${window.scrollY}px`
-    document.body.style.left = `-${scrollX}px`
-    document.body.style.width = '100%'
-    document.body.style.height = '100%'
-    document.body.style.overflow = 'hidden'
-    document.body.style.overflowX = 'hidden'
-    document.body.style.overflowY = 'hidden'
-
-    root.style.overflow = 'hidden'
-    root.style.overflowX = 'hidden'
-    root.style.overflowY = 'hidden'
-
-    // Also lock the app container if it exists
+    // If app container exists, it's the scrolling element - just lock it
     if (appContainer) {
       appContainer.style.overflow = 'hidden'
       appContainer.style.overflowY = 'hidden'
+    } else {
+      // Only apply body positioning if window is the scrolling element
+      document.body.style.position = 'fixed'
+      document.body.style.top = `-${bodyScrollY}px`
+      document.body.style.left = `-${scrollX}px`
+      document.body.style.width = '100%'
+      document.body.style.height = '100%'
+      document.body.style.overflow = 'hidden'
+      document.body.style.overflowX = 'hidden'
+      document.body.style.overflowY = 'hidden'
+
+      root.style.overflow = 'hidden'
+      root.style.overflowX = 'hidden'
+      root.style.overflowY = 'hidden'
     }
 
     // Handle Escape key - close info popup first, then card (stack behavior)
@@ -67,24 +68,24 @@ function AdventureCard({ date, adventure, loading, error, dateInfo, adventureTit
 
     return () => {
       // Restore scroll positions
-      document.body.style.position = ''
-      document.body.style.top = ''
-      document.body.style.left = ''
-      document.body.style.width = ''
-      document.body.style.height = ''
-      document.body.style.overflow = ''
-      document.body.style.overflowX = ''
-      document.body.style.overflowY = ''
-
-      root.style.overflow = ''
-      root.style.overflowX = ''
-      root.style.overflowY = ''
-
       if (appContainer) {
         appContainer.style.overflow = ''
         appContainer.style.overflowY = ''
         appContainer.scrollTop = scrollY
       } else {
+        document.body.style.position = ''
+        document.body.style.top = ''
+        document.body.style.left = ''
+        document.body.style.width = ''
+        document.body.style.height = ''
+        document.body.style.overflow = ''
+        document.body.style.overflowX = ''
+        document.body.style.overflowY = ''
+
+        root.style.overflow = ''
+        root.style.overflowX = ''
+        root.style.overflowY = ''
+        
         window.scrollTo(scrollX, scrollY)
       }
 

@@ -74,7 +74,7 @@ function App() {
 
     const endYear = 2025
     const endMonth = 11 // December
-    const endDay = 24
+    const endDay = 31
 
     // Get today's date in UTC (date only, no time)
     const now = new Date()
