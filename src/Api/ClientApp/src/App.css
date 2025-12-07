@@ -11,6 +11,9 @@
   /* Let body handle scrolling for better iOS Safari compatibility */
   overflow-y: visible;
   -webkit-overflow-scrolling: touch;
+  /* Enable hardware acceleration for smooth scrolling */
+  transform: translateZ(0);
+  backface-visibility: hidden;
   box-sizing: border-box;
   position: relative;
 }
@@ -126,6 +129,9 @@
   /* Big screens: 4 rows with 4-4-4-3 cards distribution */
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-auto-rows: 1fr;
+  /* Optimize for smooth scrolling */
+  contain: layout style paint;
+  will-change: contents;
 }
 
 .cards-container.overlay-open {

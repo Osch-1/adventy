@@ -9,8 +9,7 @@ html {
   height: 100%;
   /* Extend background to cover safe areas (Dynamic Island, notch) */
   background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
-  /* Ensure background extends to safe areas */
-  background-attachment: fixed;
+  /* Remove fixed attachment for better scroll performance on mobile */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -29,8 +28,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
-  /* Extend background to cover safe areas */
-  background-attachment: fixed;
+  /* Remove fixed attachment for better scroll performance on mobile */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -42,6 +40,9 @@ body {
   /* Allow vertical scrolling */
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  /* Enable hardware acceleration for smooth scrolling */
+  transform: translateZ(0);
+  will-change: scroll-position;
   width: 100%;
   position: relative;
 }

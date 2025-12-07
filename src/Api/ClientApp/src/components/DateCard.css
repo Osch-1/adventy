@@ -12,6 +12,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Optimize for smooth scrolling */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform;
 }
 
 .date-card::before {
