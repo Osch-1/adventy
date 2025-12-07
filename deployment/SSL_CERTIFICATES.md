@@ -294,6 +294,56 @@ sudo ls -la /etc/letsencrypt/live/adventy.ru/
 - Certificate file permissions wrong (should be readable by nginx)
 - Certificate doesn't match domain name
 
+### Certbot Cannot Find Server Block
+
+**Problem:** `Could not automatically find a matching server block for adventy.ru. Set the server_name directive to use the Nginx installer.`
+
+**Solutions:**
+
+1. **Ensure nginx config is active and reloaded:**
+   ```bash
+   # Test nginx configuration
+   sudo nginx -t
+   
+   # Reload nginx to ensure config is active
+   sudo systemctl reload nginx
+   
+   # Verify the config file is in the right place
+   ls -la /etc/nginx/sites-enabled/adventy
+   ```
+
+2. **Temporarily remove `_` from server_name (recommended):**
+   ```bash
+   # Edit the nginx config
+   sudo nano /etc/nginx/sites-available/adventy
+   
+   # Change this line:
+   # server_name adventy.ru www.adventy.ru _;
+   # To this (temporarily):
+   # server_name adventy.ru www.adventy.ru;
+   
+   # Test and reload
+   sudo nginx -t && sudo systemctl reload nginx
+   
+   # Run certbot
+   sudo certbot --nginx -d adventy.ru -d www.adventy.ru
+   
+   # After certbot succeeds, add '_' back to server_name if you need IP access
+   # Then reload: sudo nginx -t && sudo systemctl reload nginx
+   ```
+
+3. **Use certbot with explicit server root (alternative):**
+   ```bash
+   sudo certbot --nginx \
+     --nginx-server-root /etc/nginx \
+     -d adventy.ru -d www.adventy.ru
+   ```
+
+4. **Verify server_name matches exactly:**
+   - Check that `adventy.ru` (not `adventy.ru` with different spelling) is in server_name
+   - Ensure the domain is listed first in server_name
+   - Check for typos in the domain name
+
 ### Certbot Renewal Fails
 
 **Problem:** Automatic renewal not working
