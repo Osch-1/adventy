@@ -63,11 +63,17 @@ Your application should now be accessible via HTTP on port 80 (and HTTPS on port
 
 ## Production Server
 
-**Production URL:** http://81.17.154.37/
+**Production Domain:** http://2966415-bp32333.twc1.net/  
+**Production IP:** http://81.17.154.37/
 
-The application is deployed and accessible at the above address. Use this URL for testing and access.
+The application is deployed and accessible at both the domain and IP address. Use the domain URL for production access.
 
 For testing instructions, see: [TESTING_GUIDE_RU.md](../docs/TESTING_GUIDE_RU.md)
+
+### Domain and SSL Configuration
+
+- **Domain Management:** See [DOMAIN_MANAGEMENT.md](DOMAIN_MANAGEMENT.md) for DNS setup and domain configuration
+- **SSL Certificates:** See [SSL_CERTIFICATES.md](SSL_CERTIFICATES.md) for HTTPS setup and certificate management
 
 ## Single Deployment Scripts
 
@@ -274,10 +280,10 @@ sudo nano /etc/nginx/sites-available/adventy
 ```
 
 Update:
-- `server_name`: Your domain name (or leave `_` for IP access)
+- `server_name`: Your domain name (currently configured for `2966415-bp32333.twc1.net` and IP access via `_`)
 - `root`: Deployment path (default: `/opt/adventy/wwwroot`)
 - `upstream server`: Backend port if different from 5000
-- `ssl_certificate` paths: If using HTTPS
+- `ssl_certificate` paths: If using HTTPS (see [SSL_CERTIFICATES.md](SSL_CERTIFICATES.md))
 
 4. **Enable site:**
 
@@ -487,7 +493,7 @@ After deployment, your `/opt/adventy` folder should contain:
 ## Security Considerations
 
 1. **Firewall**: Configure your firewall to only allow necessary ports (80, 443)
-2. **SSL/TLS**: Enable HTTPS in production (see nginx/README.md)
+2. **SSL/TLS**: Enable HTTPS in production (see [SSL_CERTIFICATES.md](SSL_CERTIFICATES.md) for detailed SSL setup)
 3. **User Permissions**: The service runs as `www-data` with restricted permissions
 4. **Updates**: Keep the system and dependencies updated:
    ```bash
@@ -497,6 +503,8 @@ After deployment, your `/opt/adventy` folder should contain:
 ## Additional Resources
 
 - [Nginx Configuration Guide](../nginx/README.md)
+- [SSL Certificates Guide](SSL_CERTIFICATES.md) - Complete guide for SSL/HTTPS setup
+- [Domain Management Guide](DOMAIN_MANAGEMENT.md) - DNS configuration and domain setup
 - [Systemd Service Documentation](https://www.freedesktop.org/software/systemd/man/systemd.service.html)
 - [.NET Deployment Documentation](https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx)
 
