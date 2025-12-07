@@ -103,13 +103,45 @@ function AdventureCard({ date, adventure, loading, error, dateInfo, adventureTit
     })
   }
 
+  const handleOverlayClick = (e) => {
+    // Only close if clicking directly on the overlay, not on the card
+    if (e.target === e.currentTarget) {
+      e.preventDefault()
+      e.stopPropagation()
+      onClose()
+    }
+  }
+
+  const handleOverlayTouchStart = (e) => {
+    // Prevent touch events from bubbling to date cards underneath on iOS Safari
+    if (e.target === e.currentTarget) {
+      e.preventDefault()
+      e.stopPropagation()
+      onClose()
+    }
+  }
+
   return (
-    <div className="adventure-overlay" onClick={onClose}>
+    <div 
+      className="adventure-overlay" 
+      onClick={handleOverlayClick}
+      onTouchStart={handleOverlayTouchStart}
+    >
       <div
         className="adventure-card"
         onClick={(e) => e.stopPropagation()}
+        onTouchStart={(e) => e.stopPropagation()}
       >
-        <button className="adventure-close" onClick={onClose}>
+        <button 
+          className="adventure-close" 
+          onClick={(e) => {
+            e.stopPropagation()
+            onClose()
+          }}
+          onTouchStart={(e) => {
+            e.stopPropagation()
+          }}
+        >
           ×
         </button>
         <div className="adventure-card-inner">
@@ -141,6 +173,7 @@ function AdventureCard({ date, adventure, loading, error, dateInfo, adventureTit
                           e.stopPropagation()
                           setShowInfoPopup(!showInfoPopup)
                         }}
+                        onTouchStart={(e) => e.stopPropagation()}
                         aria-label="Информация"
                       >
                         ℹ️
@@ -149,6 +182,7 @@ function AdventureCard({ date, adventure, loading, error, dateInfo, adventureTit
                         <div
                           className="adventure-info-popup"
                           onClick={(e) => e.stopPropagation()}
+                          onTouchStart={(e) => e.stopPropagation()}
                         >
                           <div className="adventure-info-popup-content">
                             <button
@@ -157,6 +191,7 @@ function AdventureCard({ date, adventure, loading, error, dateInfo, adventureTit
                                 e.stopPropagation()
                                 setShowInfoPopup(false)
                               }}
+                              onTouchStart={(e) => e.stopPropagation()}
                             >
                               ×
                             </button>

@@ -4,6 +4,9 @@
   left: 0;
   right: 0;
   bottom: 0;
+  /* Support for Dynamic Island and notch areas */
+  top: env(safe-area-inset-top);
+  bottom: env(safe-area-inset-bottom);
   background: rgba(15, 23, 42, 0.95);
   backdrop-filter: blur(8px);
   display: flex;
@@ -13,7 +16,11 @@
   animation: fadeIn 0.3s ease;
   overflow: hidden;
   padding: 20px;
+  padding-top: max(20px, env(safe-area-inset-top));
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
   box-sizing: border-box;
+  /* Prevent pointer events from reaching elements underneath on iOS Safari */
+  touch-action: manipulation;
 }
 
 @keyframes fadeIn {
@@ -309,6 +316,8 @@
 @media (max-width: 768px) {
   .adventure-overlay {
     padding: 15px;
+    padding-top: max(15px, env(safe-area-inset-top));
+    padding-bottom: max(15px, env(safe-area-inset-bottom));
   }
 
   .adventure-card {
@@ -403,6 +412,8 @@
 @media (max-width: 480px) {
   .adventure-overlay {
     padding: 10px;
+    padding-top: max(10px, env(safe-area-inset-top));
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
   }
 
   .adventure-card {

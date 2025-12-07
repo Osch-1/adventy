@@ -268,7 +268,7 @@ function App() {
           )}
         </div>
       </div>
-      <div className="cards-container">
+      <div className={`cards-container ${selectedDate ? 'overlay-open' : ''}`}>
         {dates.map((dateInfo, index) => (
           <DateCard
             key={index}
