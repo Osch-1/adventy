@@ -10,7 +10,33 @@ This guide explains how to deploy the Adventy application on Ubuntu using the pr
 
 ## Quick Start
 
-For a complete automated deployment, run these commands in order:
+### Option 1: Single Deployment Scripts (Recommended)
+
+For streamlined deployment using pipeline scripts that handle everything automatically:
+
+```bash
+# 1. Install all dependencies (one-time setup)
+chmod +x deployment/install-dependencies.sh
+sudo ./deployment/install-dependencies.sh
+
+# 2. Deploy application (builds, copies, and restarts service)
+chmod +x deployment/deploy-app.sh
+sudo ./deployment/deploy-app.sh
+
+# 3. Deploy nginx configuration (configures and restarts nginx)
+chmod +x deployment/deploy-nginx.sh
+sudo ./deployment/deploy-nginx.sh
+```
+
+**Note:** Both `deploy-app.sh` and `deploy-nginx.sh` are idempotent - you can run them multiple times safely. They will:
+- Build and deploy the application
+- Install/update the systemd service
+- Restart services automatically
+- Verify deployment status
+
+### Option 2: Manual Step-by-Step Deployment
+
+For a complete automated deployment using individual scripts:
 
 ```bash
 # 1. Install all dependencies
@@ -43,9 +69,88 @@ The application is deployed and accessible at the above address. Use this URL fo
 
 For testing instructions, see: [TESTING_GUIDE_RU.md](../docs/TESTING_GUIDE_RU.md)
 
+## Single Deployment Scripts
+
+The project includes two streamlined deployment pipeline scripts that automate the entire deployment process:
+
+### `deploy-app.sh` - Application Deployment Pipeline
+
+This script handles the complete application deployment lifecycle:
+
+**Usage:**
+```bash
+sudo ./deployment/deploy-app.sh [deployment-path]
+```
+
+**Default deployment path:** `/opt/adventy`
+
+**What it does:**
+1. **Prerequisites Check** - Verifies .NET SDK, Node.js, and npm are installed
+2. **Clean Build Artifacts** - Removes old build outputs
+3. **Build Frontend** - Builds React application
+4. **Build Backend** - Builds and publishes .NET application
+5. **Deploy to Target Folder** - Copies all files to deployment directory
+6. **Install/Update Service** - Installs or updates systemd service file
+7. **Restart Service** - Restarts the application service
+8. **Verify Deployment** - Checks service status
+
+**Features:**
+- ✅ Idempotent - safe to run multiple times
+- ✅ Automatic service management
+- ✅ Colored output for easy reading
+- ✅ Error handling with clear messages
+- ✅ Deployment verification
+
+**Example:**
+```bash
+# Deploy to default path (/opt/adventy)
+sudo ./deployment/deploy-app.sh
+
+# Deploy to custom path
+sudo ./deployment/deploy-app.sh /custom/path
+```
+
+### `deploy-nginx.sh` - Nginx Configuration Deployment Pipeline
+
+This script handles nginx configuration deployment:
+
+**Usage:**
+```bash
+sudo ./deployment/deploy-nginx.sh [deployment-path]
+```
+
+**Default deployment path:** `/opt/adventy`
+
+**What it does:**
+1. **Prerequisites Check** - Verifies root privileges and nginx installation
+2. **Backup Existing Configuration** - Creates timestamped backup
+3. **Deploy Configuration** - Copies and updates nginx config
+4. **Enable Site** - Creates symlink to enable the site
+5. **Test Configuration** - Validates nginx configuration
+6. **Restart Nginx** - Restarts nginx service
+7. **Verify Deployment** - Checks nginx status
+
+**Features:**
+- ✅ Idempotent - safe to run multiple times
+- ✅ Automatic backup of existing config
+- ✅ Configuration validation before deployment
+- ✅ Colored output for easy reading
+- ✅ Deployment verification
+
+**Example:**
+```bash
+# Deploy nginx config for default path
+sudo ./deployment/deploy-nginx.sh
+
+# Deploy nginx config for custom path
+sudo ./deployment/deploy-nginx.sh /custom/path
+```
+
+**Note:** Both scripts require sudo/root privileges for service management and file operations.
+
 ## Deployment Steps
 
-Detailed step-by-step instructions:
+Detailed step-by-step instructions (for manual deployment):
 
 ### Step 1: Install Dependencies
 
@@ -233,6 +338,28 @@ sudo systemctl status adventy.service
 
 To update the application after making changes:
 
+### Using Single Deployment Script (Recommended)
+
+Simply run the deployment script - it handles everything:
+
+```bash
+# Pull latest changes (if using git)
+git pull
+
+# Deploy application (builds, copies, and restarts service automatically)
+sudo ./deployment/deploy-app.sh
+```
+
+The script will:
+- Clean build artifacts
+- Build frontend and backend
+- Copy files to deployment folder
+- Update service configuration if needed
+- Restart the service automatically
+- Verify deployment
+
+### Manual Update Process
+
 1. **Pull latest changes** (if using git):
 ```bash
 git pull
@@ -247,6 +374,22 @@ sudo ./deployment/build-all.sh
 ```bash
 sudo systemctl restart adventy.service
 ```
+
+### Updating Nginx Configuration
+
+If you need to update nginx configuration:
+
+```bash
+# Deploy nginx configuration (idempotent - safe to run multiple times)
+sudo ./deployment/deploy-nginx.sh
+```
+
+This will:
+- Backup existing configuration
+- Deploy new configuration
+- Test configuration
+- Restart nginx automatically
+- Verify deployment
 
 ## Troubleshooting
 

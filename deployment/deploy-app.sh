@@ -122,13 +122,42 @@ cd "$CLIENT_APP_PATH" || exit 1
 unset NODE_ENV 2>/dev/null || true
 export NODE_ENV=""
 
-log_step "Verifying frontend dependencies..."
+log_step "Checking frontend dependencies..."
 if [ ! -d "node_modules" ] || [ ! -f "node_modules/.bin/vite" ]; then
-    log_error "Frontend dependencies not installed"
-    echo "Please run: ./deployment/install-frontend-deps.sh"
-    exit 1
+    log_step "Frontend dependencies not found, installing..."
+    echo "This may take a few minutes depending on your internet connection..."
+    npm install --loglevel=info --progress=true
+    
+    if [ $? -ne 0 ]; then
+        log_error "Frontend dependencies installation failed"
+        echo "Trying to clean and reinstall..."
+        rm -rf node_modules package-lock.json
+        npm install --loglevel=info --progress=true
+        if [ $? -ne 0 ]; then
+            log_error "Frontend dependencies installation failed after cleanup"
+            exit 1
+        fi
+    fi
+    
+    # Verify vite is available after install
+    if [ ! -f "node_modules/.bin/vite" ]; then
+        log_error "vite is not installed after npm install"
+        if grep -q '"vite"' package.json; then
+            log_step "Trying to install vite explicitly..."
+            npm install vite @vitejs/plugin-react --save-dev
+            if [ $? -ne 0 ]; then
+                log_error "Could not install vite"
+                exit 1
+            fi
+        else
+            log_error "vite is not in package.json"
+            exit 1
+        fi
+    fi
+    log_success "Frontend dependencies installed"
+else
+    log_success "Frontend dependencies verified"
 fi
-log_success "Frontend dependencies verified"
 
 log_step "Building React application..."
 npm run build
