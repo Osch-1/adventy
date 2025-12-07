@@ -19,16 +19,37 @@ Environment=PATH=/usr/share/dotnet:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr
 StandardOutput=journal
 StandardError=journal
 
-# Security settings
+# Security settings (relaxed for high load)
 NoNewPrivileges=true
 PrivateTmp=true
-ProtectSystem=strict
-ProtectHome=true
+# ProtectSystem=strict  # Commented out to allow unlimited system access
+# ProtectHome=true      # Commented out to allow unlimited home access
 ReadWritePaths=/opt/adventy
 ReadOnlyPaths=/usr
 
-# Resource limits
-LimitNOFILE=65536
+# Resource limits - set to unlimited/high values for high load scenarios
+# File descriptors (unlimited - allows up to system max, typically 1M+)
+LimitNOFILE=infinity
+# Address space / Virtual memory (unlimited)
+LimitAS=infinity
+# CPU time (unlimited)
+LimitCPU=infinity
+# Process count (unlimited)
+LimitNPROC=infinity
+# Core dumps (unlimited)
+LimitCORE=infinity
+# Locked memory (unlimited - important for high performance)
+LimitMEMLOCK=infinity
+# Message queue (unlimited)
+LimitMSGQUEUE=infinity
+# Nice priority range (allows -20 to 19)
+LimitNICE=39
+# Real-time priority (unlimited)
+LimitRTPRIO=infinity
+# Real-time CPU time (unlimited)
+LimitRTTIME=infinity
+# Stack size (unlimited)
+LimitSTACK=infinity
 
 [Install]
 WantedBy=multi-user.target
