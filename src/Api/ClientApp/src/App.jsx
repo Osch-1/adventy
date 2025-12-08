@@ -44,6 +44,12 @@ function getErrorMessage(error) {
   return '⚠️ Неожиданная ошибка. Пожалуйста, обратитесь к администратору.'
 }
 
+// Return a random Christmas emoji for future dates without content
+function getRandomChristmasEmoji() {
+  const emojis = ['🎄', '🎅', '🤶', '🧑‍🎄', '⛄', '🦌', '🎁']
+  return emojis[Math.floor(Math.random() * emojis.length)]
+}
+
 function App() {
   const [selectedDate, setSelectedDate] = useState(null)
   const [adventure, setAdventure] = useState(null)
@@ -189,8 +195,16 @@ function App() {
         })
       } else {
         // Handle backend errors with Russian messages
-        const errorMessage = getErrorMessage(data.errors?.[0])
-        setError(errorMessage)
+        const primaryError = data.errors?.[0]
+
+        // For future dates, show a festive emoji instead of a warning
+        if (dateInfo.isFuture && primaryError?.type === 0 && primaryError?.code === 3) {
+          setAdventure(getRandomChristmasEmoji())
+          setError(null)
+        } else {
+          const errorMessage = getErrorMessage(primaryError)
+          setError(errorMessage)
+        }
       }
     } catch (err) {
       setError('⚠️ Неожиданная ошибка. Пожалуйста, обратитесь к администратору.')
