@@ -70,8 +70,7 @@ public class AdventuresController : ControllerBase
         DateTimeOffset serverUtcNow = DateTimeOffset.UtcNow;
         DateTimeOffset userLocalNow = TimeZoneInfo.ConvertTime( serverUtcNow, userTimeZone );
         DateTimeOffset userLocalDate = userLocalNow.Date;
-        DateTimeOffset searchDateInUserTimezone = TimeZoneInfo.ConvertTime( searchDateTimeOffset, userTimeZone ).Date;
-        if ( !skipSearchDateHasNotAppearedValidation && ( userLocalDate < searchDateInUserTimezone ) )
+        if ( !skipSearchDateHasNotAppearedValidation && ( userLocalDate < searchDateTimeOffset ) )
         {
             const string msgTemplate = "Requested date {0} is not yet appeared, please wait a little bit.";
             string msg = string.Format( msgTemplate, searchDateTime.ToString( "yyyy-MM-dd" ) );
