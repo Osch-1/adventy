@@ -67,9 +67,11 @@ public class AdventuresController : ControllerBase
             return BadRequest( response );
         }
 
-        DateTimeOffset serverUtcNowDate = DateTimeOffset.UtcNow.Date;
-        DateTimeOffset userLocalDate = TimeZoneInfo.ConvertTime( serverUtcNowDate, userTimeZone );
-        if ( !skipSearchDateHasNotAppearedValidation && ( userLocalDate < searchDateTimeOffset ) )
+        DateTimeOffset serverUtcNow = DateTimeOffset.UtcNow;
+        DateTimeOffset userLocalNow = TimeZoneInfo.ConvertTime( serverUtcNow, userTimeZone );
+        DateTimeOffset userLocalDate = userLocalNow.Date;
+        DateTimeOffset searchDateInUserTimezone = TimeZoneInfo.ConvertTime( searchDateTimeOffset, userTimeZone ).Date;
+        if ( !skipSearchDateHasNotAppearedValidation && ( userLocalDate < searchDateInUserTimezone ) )
         {
             const string msgTemplate = "Requested date {0} is not yet appeared, please wait a little bit.";
             string msg = string.Format( msgTemplate, searchDateTime.ToString( "yyyy-MM-dd" ) );
