@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo, useEffect, useRef } from 'react'
 import DateCard from './components/DateCard'
 import AdventureCard from './components/AdventureCard'
 import './App.css'
@@ -59,6 +59,12 @@ function App() {
     first: null,
     second: null
   })
+
+  // Ref for cards container and auto-scroll management
+  const cardsContainerRef = useRef(null)
+  const autoScrollTimeoutRef = useRef(null)
+  const isAutoScrollingRef = useRef(false)
+  const userInteractedRef = useRef(false)
 
   // Read query parameters for skip validation secrets
   // Using generic names (first, second) to hide actual header names from users
@@ -249,6 +255,179 @@ function App() {
     }
   }, [showInfoPopup, selectedDate])
 
+  // Auto-scroll to today's date on mount
+  useEffect(() => {
+    // Only auto-scroll if user hasn't interacted yet
+    if (userInteractedRef.current) {
+      return
+    }
+
+    // Find today's date index
+    const todayIndex = dates.findIndex(dateInfo => dateInfo.isToday)
+
+    if (todayIndex === -1 || !cardsContainerRef.current) {
+      return
+    }
+
+    // Get the today's date card element
+    const cardsContainer = cardsContainerRef.current
+    const todayCard = cardsContainer.children[todayIndex]
+
+    if (!todayCard) {
+      return
+    }
+
+    let scrollStartPosition = { x: window.scrollX, y: window.scrollY }
+    let lastScrollTime = Date.now()
+    let scrollTimeout = null
+    let animationFrameId = null
+
+    // Easing function for smooth acceleration and deceleration (ease-in-out cubic)
+    const easeInOutCubic = (t) => {
+      return t < 0.5
+        ? 4 * t * t * t
+        : 1 - Math.pow(-2 * t + 2, 3) / 2
+    }
+
+    // Cancel scroll handlers
+    const cancelAutoScroll = () => {
+      userInteractedRef.current = true
+      isAutoScrollingRef.current = false
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId)
+        animationFrameId = null
+      }
+      if (autoScrollTimeoutRef.current) {
+        clearTimeout(autoScrollTimeoutRef.current)
+        autoScrollTimeoutRef.current = null
+      }
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout)
+        scrollTimeout = null
+      }
+    }
+
+    // Custom smooth scroll function with easing
+    const smoothScrollTo = (targetElement, duration = 1200) => {
+      if (!targetElement) return
+
+      const startX = window.scrollX || window.pageXOffset
+      const startY = window.scrollY || window.pageYOffset
+
+      // Get element position relative to viewport
+      const rect = targetElement.getBoundingClientRect()
+      const targetX = startX + rect.left + rect.width / 2 - window.innerWidth / 2
+      const targetY = startY + rect.top + rect.height / 2 - window.innerHeight / 2
+
+      const distanceX = targetX - startX
+      const distanceY = targetY - startY
+      const startTime = performance.now()
+
+      const animateScroll = (currentTime) => {
+        if (userInteractedRef.current || !isAutoScrollingRef.current) {
+          return
+        }
+
+        const elapsed = currentTime - startTime
+        const progress = Math.min(elapsed / duration, 1)
+        const easedProgress = easeInOutCubic(progress)
+
+        const currentX = startX + distanceX * easedProgress
+        const currentY = startY + distanceY * easedProgress
+
+        window.scrollTo(currentX, currentY)
+
+        if (progress < 1) {
+          animationFrameId = requestAnimationFrame(animateScroll)
+        } else {
+          isAutoScrollingRef.current = false
+          animationFrameId = null
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(animateScroll)
+    }
+
+    // Function to perform smooth scroll
+    const performScroll = () => {
+      if (userInteractedRef.current || !todayCard) {
+        return
+      }
+
+      isAutoScrollingRef.current = true
+      scrollStartPosition = { x: window.scrollX, y: window.scrollY }
+
+      // Calculate scroll duration based on distance for consistent speed
+      const rect = todayCard.getBoundingClientRect()
+      const currentY = window.scrollY || window.pageYOffset
+      const targetY = currentY + rect.top + rect.height / 2 - window.innerHeight / 2
+      const distance = Math.abs(targetY - currentY)
+
+      // Base duration of 800ms, add 0.3ms per pixel for longer distances
+      // This ensures consistent perceived speed regardless of distance
+      const duration = Math.min(800 + distance * 0.3, 2000)
+
+      // Use custom smooth scroll with easing
+      smoothScrollTo(todayCard, duration)
+    }
+
+    // Delay scroll slightly to ensure DOM is fully rendered and layout is stable
+    scrollTimeout = setTimeout(performScroll, 300)
+
+    // Listen for user interactions to cancel auto-scroll
+    const handleClick = (e) => {
+      // Don't cancel if clicking on info icon or popup
+      if (!e.target.closest('.app-info-icon') && !e.target.closest('.info-popup')) {
+        cancelAutoScroll()
+      }
+    }
+
+    const handleTouchStart = () => {
+      cancelAutoScroll()
+    }
+
+    const handleTouchMove = () => {
+      cancelAutoScroll()
+    }
+
+    const handleWheel = () => {
+      cancelAutoScroll()
+    }
+
+    const handleScroll = () => {
+      // Only cancel if we're not currently auto-scrolling
+      // During auto-scroll, our custom animation will trigger scroll events,
+      // so we ignore them to avoid interrupting the smooth animation
+      if (!isAutoScrollingRef.current) {
+        cancelAutoScroll()
+      }
+    }
+
+    // Add event listeners with capture phase to catch early
+    const options = { passive: true, capture: true }
+    document.addEventListener('click', handleClick, options)
+    document.addEventListener('touchstart', handleTouchStart, options)
+    document.addEventListener('touchmove', handleTouchMove, options)
+    document.addEventListener('wheel', handleWheel, options)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    // Cleanup
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId)
+      }
+      clearTimeout(scrollTimeout)
+      if (autoScrollTimeoutRef.current) {
+        clearTimeout(autoScrollTimeoutRef.current)
+      }
+      document.removeEventListener('click', handleClick, { capture: true })
+      document.removeEventListener('touchstart', handleTouchStart, { capture: true })
+      document.removeEventListener('touchmove', handleTouchMove, { capture: true })
+      document.removeEventListener('wheel', handleWheel, { capture: true })
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [dates])
+
   return (
     <div className="app">
       <div className="app-header">
@@ -282,7 +461,10 @@ function App() {
           )}
         </div>
       </div>
-      <div className={`cards-container ${selectedDate ? 'overlay-open' : ''}`}>
+      <div
+        ref={cardsContainerRef}
+        className={`cards-container ${selectedDate ? 'overlay-open' : ''}`}
+      >
         {dates.map((dateInfo, index) => (
           <DateCard
             key={index}
