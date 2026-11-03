@@ -42,35 +42,37 @@ function AdventureCard({ date, adventure, loading, error, dateInfo, adventureTit
   }, [showInfoPopup])
 
   useEffect(() => {
-    // Get the app container and root element
-    const appContainer = document.querySelector('.app')
     const root = document.documentElement
-
-    // Save current scroll positions BEFORE any changes
-    const scrollY = appContainer ? appContainer.scrollTop : window.scrollY
+    const body = document.body
     const scrollX = window.scrollX
-    const bodyScrollY = window.scrollY
-
-    // If app container exists, it's the scrolling element - just lock it
-    if (appContainer) {
-      appContainer.style.overflow = 'hidden'
-      appContainer.style.overflowY = 'hidden'
-    } else {
-      // Only apply body positioning if window is the scrolling element
-      document.body.style.position = 'fixed'
-      document.body.style.top = `-${bodyScrollY}px`
-      document.body.style.left = `-${scrollX}px`
-      document.body.style.width = '100%'
-      document.body.style.height = '100%'
-      document.body.style.overflow = 'hidden'
-      document.body.style.overflowX = 'hidden'
-      document.body.style.overflowY = 'hidden'
-
-      root.style.overflow = 'hidden'
-      root.style.overflowX = 'hidden'
-      root.style.overflowY = 'hidden'
+    const scrollY = window.scrollY
+    const previousRootOverflow = root.style.overflow
+    const previousBodyStyles = {
+      position: body.style.position,
+      top: body.style.top,
+      left: body.style.left,
+      width: body.style.width,
+      overflow: body.style.overflow
     }
 
+    // Lock the document, including touch scrolling, without moving the background.
+    root.style.overflow = 'hidden'
+    Object.assign(body.style, {
+      position: 'fixed',
+      top: `-${scrollY}px`,
+      left: `-${scrollX}px`,
+      width: '100%',
+      overflow: 'hidden'
+    })
+
+    return () => {
+      root.style.overflow = previousRootOverflow
+      Object.assign(body.style, previousBodyStyles)
+      window.scrollTo(scrollX, scrollY)
+    }
+  }, [])
+
+  useEffect(() => {
     // Handle Escape key - close info popup first, then card (stack behavior)
     const handleEscape = (event) => {
       if (event.key === 'Escape') {
@@ -86,31 +88,7 @@ function AdventureCard({ date, adventure, loading, error, dateInfo, adventureTit
 
     document.addEventListener('keydown', handleEscape)
 
-    return () => {
-      // Restore scroll positions
-      if (appContainer) {
-        appContainer.style.overflow = ''
-        appContainer.style.overflowY = ''
-        appContainer.scrollTop = scrollY
-      } else {
-        document.body.style.position = ''
-        document.body.style.top = ''
-        document.body.style.left = ''
-        document.body.style.width = ''
-        document.body.style.height = ''
-        document.body.style.overflow = ''
-        document.body.style.overflowX = ''
-        document.body.style.overflowY = ''
-
-        root.style.overflow = ''
-        root.style.overflowX = ''
-        root.style.overflowY = ''
-        
-        window.scrollTo(scrollX, scrollY)
-      }
-
-      document.removeEventListener('keydown', handleEscape)
-    }
+    return () => document.removeEventListener('keydown', handleEscape)
   }, [onClose, showInfoPopup])
 
   const formatDate = (date) => {
