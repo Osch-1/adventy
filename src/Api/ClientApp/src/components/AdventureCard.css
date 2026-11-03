@@ -236,6 +236,12 @@
   padding-right: 25px;
 }
 
+.adventure-message a {
+  color: #93c5fd;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .adventure-message {
   font-size: 1.3rem;
   line-height: 1.8;

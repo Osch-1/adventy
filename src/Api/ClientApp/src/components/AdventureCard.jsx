@@ -1,6 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import './AdventureCard.css'
 
+function renderAdventureMessage(message) {
+  return message.split(/(\[[^\]]+\]\(https?:\/\/[^\s)]+\))/g).map((part, index) => {
+    const link = part.match(/^\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)$/)
+    if (!link) return part
+
+    return (
+      <a
+        key={index}
+        href={link[2]}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={(event) => event.stopPropagation()}
+        onTouchEnd={(event) => event.stopPropagation()}
+      >
+        {link[1]}
+      </a>
+    )
+  })
+}
+
 function AdventureCard({ date, adventure, loading, error, dateInfo, adventureTitle, onClose }) {
   const isToday = dateInfo?.isToday || false
   const isPast = dateInfo?.isPast || false
@@ -225,7 +245,7 @@ function AdventureCard({ date, adventure, loading, error, dateInfo, adventureTit
                         </div>
                       )}
                     </div>
-                    <div className="adventure-message">{adventure}</div>
+                    <div className="adventure-message">{renderAdventureMessage(adventure)}</div>
                   </div>
                 )}
               </>

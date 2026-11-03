@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "src\Api\Api.csproj",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "src\Domain\Domain.csproj", "{056678E3-DA75-4A0C-B8BB-F63EE8458D3B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adventy.Tests", "tests\Adventy.Tests\Adventy.Tests.csproj", "{EA648C97-98A7-4BAA-A837-4230E26C2E59}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +27,10 @@ Global
 		{056678E3-DA75-4A0C-B8BB-F63EE8458D3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{056678E3-DA75-4A0C-B8BB-F63EE8458D3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{056678E3-DA75-4A0C-B8BB-F63EE8458D3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA648C97-98A7-4BAA-A837-4230E26C2E59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA648C97-98A7-4BAA-A837-4230E26C2E59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA648C97-98A7-4BAA-A837-4230E26C2E59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA648C97-98A7-4BAA-A837-4230E26C2E59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -30,6 +38,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{793A07C2-8363-4A77-A459-4CF4FD4A2D30} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{056678E3-DA75-4A0C-B8BB-F63EE8458D3B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{EA648C97-98A7-4BAA-A837-4230E26C2E59} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {791E9545-8449-4705-AE84-CC9001CDFEF3}

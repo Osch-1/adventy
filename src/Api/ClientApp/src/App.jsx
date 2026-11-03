@@ -76,15 +76,15 @@ function App() {
     })
   }, [])
 
-  // Generate dates from December 10, 2025 to December 31, 2025
+  // Generate dates from December 1, 2026 to December 31, 2026
   // Using UTC to make calendar timezone-independent
   const dates = useMemo(() => {
     // Create dates in UTC to avoid timezone issues
-    const startYear = 2025
+    const startYear = 2026
     const startMonth = 11 // December (0-indexed)
-    const startDay = 10
+    const startDay = 1
 
-    const endYear = 2025
+    const endYear = 2026
     const endMonth = 11 // December
     const endDay = 31
 
