@@ -1,0 +1,71 @@
+.december-decoration, .calendar-house-detail {
+  position:absolute;
+  z-index:1;
+  display:block;
+  aspect-ratio:1;
+  transform:translate(-50%, -50%);
+  pointer-events:none;
+}
+
+.december-decoration-painted::after, .calendar-house-detail::after {
+  content:'';
+  position:absolute;
+  inset:0;
+  background-image:var(--paint-image);
+  background-repeat:no-repeat;
+  background-size:inherit;
+  background-position:inherit;
+  clip-path:var(--paint-clip, none);
+  mask-image:var(--paint-mask,
+    linear-gradient(to right, transparent, #000 4%, #000 96%, transparent),
+    linear-gradient(to bottom, transparent, #000 4%, #000 96%, transparent));
+  mask-size:100% 100%;
+  mask-composite:intersect;
+}
+
+/* Transparent ornaments preserve the original branches and earlier decorations. */
+.december-decoration-painted.is-alpha::after { mask-image:none; }
+.calendar-house-detail.is-canopy { z-index:3; }
+.calendar-house-detail.is-canopy::after { mask-image:none; }
+.december-decoration.is-front { z-index:4; }
+
+/* The original wooden sash sits in front of decorations inside the halls. */
+.december-decoration-window-frame {
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background-image:url('../assets/optimized/winter-house-base-v1.webp');
+  background-repeat:no-repeat;
+  background-size:var(--foreground-size);
+  background-position:var(--foreground-position);
+}
+
+.december-decoration-window-frame.is-lower {
+  clip-path:polygon(50.4% 0, 54.7% 0, 54.7% 46.6%, 100% 46.6%, 100% 52%, 54.7% 52%, 54.7% 100%, 50.4% 100%, 50.4% 52%, 0 52%, 0 46.6%, 50.4% 46.6%);
+}
+
+.december-decoration-window-frame.is-upper {
+  clip-path:polygon(50% 0, 54.3% 0, 54.3% 35.9%, 100% 35.9%, 100% 39.8%, 54.3% 39.8%, 54.3% 100%, 50% 100%, 50% 39.8%, 0 39.8%, 0 35.9%, 50% 35.9%);
+}
+
+.december-decoration-window-frame.is-curtain-left {
+  clip-path:polygon(0 0, 25% 0, 18% 34%, 9% 62%, 15% 100%, 0 100%);
+}
+
+.december-decoration-window-frame.is-curtain-right {
+  clip-path:polygon(74% 0, 100% 0, 100% 100%, 82% 100%, 91% 67%, 92% 57%, 85% 34%);
+}
+
+.december-decoration button {
+  position:absolute;
+  z-index:1;
+  inset:var(--hit-y, 50%) auto auto var(--hit-x, 50%);
+  width:max(var(--hit-width, 100%), 28px);
+  height:max(var(--hit-height, 100%), 28px);
+  transform:translate(-50%, -50%);
+  padding:0;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+  pointer-events:auto;
+}

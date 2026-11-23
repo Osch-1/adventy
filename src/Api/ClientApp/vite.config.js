@@ -18,6 +18,10 @@ export default defineConfig(({ command, mode }) => {
       ...baseConfig,
       server: {
         port: 5173,
+        fs: {
+          deny: ['.env', '.env.*', '*.{crt,pem}', '**/.git/**', '**/DecorationAssets/**',
+            '**/ClientApp/scripts/**', '**/ClientApp/src/assets/house/**']
+        },
         // Proxy API requests to ASP.NET Core backend during development
         proxy: {
           '/api': {
@@ -36,6 +40,7 @@ export default defineConfig(({ command, mode }) => {
     build: {
       outDir: 'wwwroot',
       emptyOutDir: true,
+      assetsInlineLimit: 0,
       // Production optimizations
       minify: 'esbuild',
       sourcemap: false,

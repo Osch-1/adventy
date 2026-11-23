@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using Api.Contracts.Responses;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
@@ -9,33 +9,46 @@ namespace Api.Controllers;
 [Route( "/api/[controller]/" )]
 public class AdventuresController : ControllerBase
 {
-    private const string _skipSearchDateInRangeValidationSecret = "CggAEEUYFhgeGDkyCggBEAAYgA_secret_to_skip_date_in_range";
-    private const string _skipSearchDateHasNotAppearedValidationSecret = "EgZjaHJvbWUyCggAE_secret_to_skip_date_has_not_appeared";
 
-    private static readonly DateTimeOffset _leftSearchBoarder = new( 2026, 12, 1, 0, 0, 0, TimeSpan.Zero );
-    private static readonly DateTimeOffset _rightSearchBoarder = new( 2027, 1, 1, 0, 0, 0, TimeSpan.Zero );
+    private static readonly DateTimeOffset _leftSearchBoundary = new( 2026, 12, 1, 0, 0, 0, TimeSpan.Zero );
+    private static readonly DateTimeOffset _rightSearchBoundary = new( 2027, 1, 1, 0, 0, 0, TimeSpan.Zero );
 
     private readonly DailyAdventureProvider _dailyAdventureProvider;
+    private readonly TimeProvider _timeProvider;
 
-    public AdventuresController()
+    public AdventuresController( TimeProvider timeProvider )
     {
         _dailyAdventureProvider = new DailyAdventureProvider();
+        _timeProvider = timeProvider;
     }
 
     [HttpGet( "" )]
     [ProducesResponseType( typeof( Response<Adventure> ), ( int )HttpStatusCode.OK )]
     public IActionResult GetAdventure(
+        [FromQuery] DateTime searchDateTime ) => ResolveAdventure( searchDateTime );
+
+    // Simulated dates are accepted only by the development endpoint.
+    [HttpGet( "/api/dev/window-preview/adventure" )]
+    [ResponseCache( NoStore = true, Location = ResponseCacheLocation.None )]
+    public IActionResult GetPreviewAdventure(
         [FromQuery] DateTime searchDateTime,
-        [FromHeader( Name = "X-Timezone" )] string? userTimezoneId,
-        [FromHeader( Name = "Adventy-SkipSearchDateInRangeValidationSecret" )] string? skipSearchDateInRangeValidationSecret,
-        [FromHeader( Name = "Adventy-SkipSearchDateHasNotAppearedValidationSecret" )] string? skipSearchDateHasNotAppearedValidationSecret )
+        [FromQuery] DateOnly previewDate,
+        [FromServices] IWebHostEnvironment environment )
     {
-        DateTimeOffset searchDateTimeOffset = new( searchDateTime, TimeSpan.Zero );
+        if ( !environment.IsDevelopment() ) return NotFound();
+        if ( !DecemberCalendar.IsPreviewDate( previewDate ) )
+            return BadRequest( new Response( new Error( ErrorType.InvalidRequestParameters,
+                ErrorCode.InvalidSearchDate, "Preview date must be between 2026-11-29 and 2027-01-01." ) ) );
 
-        bool skipSearchDateInRangeValidation = _skipSearchDateInRangeValidationSecret.Equals( skipSearchDateInRangeValidationSecret, StringComparison.InvariantCulture );
-        bool skipSearchDateHasNotAppearedValidation = _skipSearchDateHasNotAppearedValidationSecret.Equals( skipSearchDateHasNotAppearedValidationSecret, StringComparison.InvariantCulture );
+        return ResolveAdventure( searchDateTime, previewDate );
+    }
 
-        if ( !skipSearchDateInRangeValidation && ( searchDateTimeOffset < _leftSearchBoarder || searchDateTimeOffset >= _rightSearchBoarder ) )
+    private IActionResult ResolveAdventure( DateTime searchDateTime, DateOnly? simulatedDate = null )
+    {
+        DateTimeOffset searchDateTimeOffset = new( DateTime.SpecifyKind( searchDateTime, DateTimeKind.Unspecified ), TimeSpan.Zero );
+
+
+        if ( searchDateTimeOffset < _leftSearchBoundary || searchDateTimeOffset >= _rightSearchBoundary )
         {
             const string msg = "Search date must be in range from 1st of December 2026 up to 31st of December 2026.";
             Error error = new( ErrorType.InvalidRequestParameters, ErrorCode.InvalidSearchDate, msg );
@@ -44,33 +57,9 @@ public class AdventuresController : ControllerBase
             return BadRequest( response );
         }
 
-        if ( string.IsNullOrWhiteSpace( userTimezoneId ) )
-        {
-            const string msg = "No user time zone has been provided. User time zone must be provided in format of IANA Id.";
-            Error error = new( ErrorType.InvalidRequestParameters, ErrorCode.InvalidUserTimeZone, msg );
-            Response response = new( error );
-
-            return BadRequest( response );
-        }
-
-        TimeZoneInfo userTimeZone;
-        try
-        {
-            userTimeZone = TimeZoneInfo.FindSystemTimeZoneById( userTimezoneId );
-        }
-        catch ( TimeZoneNotFoundException )
-        {
-            const string msg = "User time zone must be provided in format of IANA Id.";
-            Error error = new( ErrorType.InvalidRequestParameters, ErrorCode.InvalidUserTimeZone, msg );
-            Response response = new( error );
-
-            return BadRequest( response );
-        }
-
-        DateTimeOffset serverUtcNow = DateTimeOffset.UtcNow;
-        DateTimeOffset userLocalNow = TimeZoneInfo.ConvertTime( serverUtcNow, userTimeZone );
-        DateTimeOffset userLocalDate = userLocalNow.Date;
-        if ( !skipSearchDateHasNotAppearedValidation && ( userLocalDate < searchDateTimeOffset ) )
+        DateOnly today = simulatedDate ?? DecemberCalendar.Today( _timeProvider );
+        DateOnly searchDate = DateOnly.FromDateTime( searchDateTime );
+        if ( today < searchDate )
         {
             const string msgTemplate = "Requested date {0} is not yet appeared, please wait a little bit.";
             string msg = string.Format( msgTemplate, searchDateTime.ToString( "yyyy-MM-dd" ) );

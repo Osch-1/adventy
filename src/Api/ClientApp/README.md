@@ -8,7 +8,7 @@ For local development, you need to run both the backend and frontend:
 
 1. **Start the backend** (in a separate terminal):
    ```bash
-   cd ../..  # Go to src/Api
+   cd ..  # Go to src/Api
    dotnet run
    ```
 
@@ -49,29 +49,9 @@ See `docs/nginx.conf.example` in the root folder for a sample nginx configuratio
 
 ## Testing Features
 
-### Skip Validation Secrets
+### Preview a date locally
 
-For testing purposes, you can bypass date validation by providing query parameters when opening the page:
-
-```
-?first=SECRET&second=SECRET
-```
-
-Example:
-```
-http://localhost:5173/?first=CggAEEUYFhgeGDkyCggBEAAYgA_secret_to_skip_date_in_range&second=EgZjaHJvbWUyCggAE_secret_to_skip_date_has_not_appeared
-```
-
-**Parameter mapping:**
-- `first` - Skips date range validation
-- `second` - Skips "date has not appeared" validation
-
-**Note:** Past dates can be viewed without any parameters - they are accessible to all users.
-
-This allows you to:
-- View adventures for past dates (no parameters needed)
-- View adventures for future dates (with `second`)
-- View adventures outside the date range (with `first`)
+Open http://localhost:5173/?preview=1 and select a test date below the house. This panel is available only in the development build.
 
 ### Keyboard Shortcuts
 

@@ -1,0 +1,9 @@
+# Winter letter — 6 November 2026
+
+`winter-letter-v1.png`: generated with the built-in imagegen tool. Transparent winter vignette for the shared task dialog, referencing the existing house illustration. The paper, date and task text remain live HTML; the asset contains no text. It is shared by all days and by future/error states, so no illustration reveals a future task.
+
+The user asked to replace emoji/sticker styling in the task cards with the same illustration quality as the house. Impeccable was used for the existing-world refinement. Decorative leading emoji are omitted in the title presentation only; original task messages and API data are preserved.
+
+## Exact generation prompt
+
+Use case: illustration-story. Production decorative asset for an Adventy daily-task reading card in the same hand-painted winter storybook world as the supplied house reference. A refined, quiet wide horizontal still-life vignette placed at the TOP RIGHT corner of a warm cream paper letter: an evergreen fir bough entering from the top right, a few red winter berries, one small pinecone with a trace of snow, a folded cream envelope tied with thin dark-red thread and an old small brass key resting beside it. Soft amber lamplight from the house, rich hand-painted wood-and-paper textures, carefully observed materials, blue winter reflected shadows. Composition: all objects form one natural small arrangement toward right half, left half mostly EMPTY and transparent so real live date text can sit beside it; edges softly feather naturally into alpha, no hard rectangular picture border. Landscape ratio about 3:1, transparent background. No lettering, numbers, watermark, emblems, wax seals, hearts, stars, emoji, cartoon stickers or icon-like outlines. This is an elegant illustrated winter letter detail matching the provided richly illustrated house, restrained enough for a readable task card, not a photographic mockup or whole UI.

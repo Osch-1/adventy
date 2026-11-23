@@ -12,15 +12,15 @@ public class DailyAdventureProvider
                 (12, 1),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 1, 0, 0, 0, TimeSpan.Zero),
-                    "🎯 Задание на сегодня",
-                    "Стартуем: На столах у каждого есть тайм-код, в чат отправляй скрин какой момент попался тебе"
+                    "Поймай свой кадр",
+                    "Стартуем: На столах у каждого печенье с предсказанием, в чат отправляй фото что попалось именно тебе   "
                 )
             },
             {
                 (12, 2),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 2, 0, 0, 0, TimeSpan.Zero),
-                    "✨ Твое приключение",
+                    "Три кадра из окна",
                     "Сегодня сделай коллаж из фото. Смотри в окно утром, в обед, вечером. Отправь фото в чат, что ты там увидел в разное время суток:)"
                 )
             },
@@ -28,7 +28,7 @@ public class DailyAdventureProvider
                 (12, 3),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 3, 0, 0, 0, TimeSpan.Zero),
-                    "🎄 Новогоднее задание",
+                    "Жёлтый переполох",
                     "Ищем на улице желтый объект, фото кидаем в чат"
                 )
             },
@@ -36,7 +36,7 @@ public class DailyAdventureProvider
                 (12, 4),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 4, 0, 0, 0, TimeSpan.Zero),
-                    "🌟 Сегодняшний квест",
+                    "Хвостатые знаменитости",
                     "В этом году снова не можем пройти мимо милых, обаятельных и хвостатых) Кидай фото питомца в чат:) Если есть какая-то смешная история - делись)"
                 )
             },
@@ -44,7 +44,7 @@ public class DailyAdventureProvider
                 (12, 5),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 5, 0, 0, 0, TimeSpan.Zero),
-                    "🎁 Задание дня",
+                    "Горошек под прикрытием",
                     "Сегодня нужно купить зелёный горошек. Да, вот так. Заранее!"
                 )
             },
@@ -52,7 +52,7 @@ public class DailyAdventureProvider
                 (12, 6),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 6, 0, 0, 0, TimeSpan.Zero),
-                    "❄️ Зимнее приключение",
+                    "Праздник из бумаги",
                     "Делаем новогоднее оригами. Инструкция [тут](https://www.youtube.com/watch?v=3v8qVDh1qf4)"
                 )
             },
@@ -60,7 +60,7 @@ public class DailyAdventureProvider
                 (12, 7),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 7, 0, 0, 0, TimeSpan.Zero),
-                    "🎊 Твоя миссия",
+                    "Твой последний промпт",
                     "Скинь скрин последнего промпта ИИшке"
                 )
             },
@@ -68,7 +68,7 @@ public class DailyAdventureProvider
                 (12, 8),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 8, 0, 0, 0, TimeSpan.Zero),
-                    "🎈 Задание для тебя",
+                    "Операция «Восемь котов»",
                     "На 2 этаже офиса спрятаны 8 новогодних котов, найди всех. С последним найденным - сделай фото)"
                 )
             },
@@ -76,7 +76,7 @@ public class DailyAdventureProvider
                 (12, 9),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 9, 0, 0, 0, TimeSpan.Zero),
-                    "🎯 Задание на сегодня",
+                    "Пятиминутка бодрости",
                     "Зарядка 5 минут. Фотоотчет кидаем в чат"
                 )
             },
@@ -84,7 +84,7 @@ public class DailyAdventureProvider
                 (12, 10),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 10, 0, 0, 0, TimeSpan.Zero),
-                    "🎯 Задание на сегодня",
+                    "Три строки о языке программирования",
                     "Попроси любую нейросеть написать трехстишие о твоем любимом языке программирования. Скинь лучший результат."
                 )
             },
@@ -92,7 +92,7 @@ public class DailyAdventureProvider
                 (12, 11),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 11, 0, 0, 0, TimeSpan.Zero),
-                    "✨ Твое приключение",
+                    "Карманные тайны",
                     "Обзор \"Что в моей сумке/кармане\"."
                 )
             },
@@ -100,7 +100,7 @@ public class DailyAdventureProvider
                 (12, 12),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 12, 0, 0, 0, TimeSpan.Zero),
-                    "🎄 Новогоднее задание",
+                    "Сладкая сторона декабря",
                     "Готовим один любой новогодний десерт. Есть тоже не забываем"
                 )
             },
@@ -108,7 +108,7 @@ public class DailyAdventureProvider
                 (12, 13),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 13, 0, 0, 0, TimeSpan.Zero),
-                    "🌟 Сегодняшний квест",
+                    "Сегодня можно выдохнуть",
                     "Адвент-календарь сегодня отдыхает, и ты отдыхай."
                 )
             },
@@ -116,7 +116,7 @@ public class DailyAdventureProvider
                 (12, 14),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 14, 0, 0, 0, TimeSpan.Zero),
-                    "🎁 Задание дня",
+                    "Кто тут ёлка?",
                     "Ёлка бывает разная: Наряди любой предмет, как ёлку:)"
                 )
             },
@@ -124,7 +124,7 @@ public class DailyAdventureProvider
                 (12, 15),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 15, 0, 0, 0, TimeSpan.Zero),
-                    "❄️ Зимнее приключение",
+                    "Любимый фон для созвонов",
                     "Сделай скрин любимого фона на онлайн встречах"
                 )
             },
@@ -132,7 +132,7 @@ public class DailyAdventureProvider
                 (12, 16),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 16, 0, 0, 0, TimeSpan.Zero),
-                    "🎊 Твоя миссия",
+                    "Десять секунд твоего дня",
                     "Звуки офиса/дома. Запиши 10-секундное аудио того, что происходит вокруг тебя прямо сейчас (звук кофе-машины, кот мурлычет, смех, тишина и т.д.) и скинь в чат."
                 )
             },
@@ -140,7 +140,7 @@ public class DailyAdventureProvider
                 (12, 17),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 17, 0, 0, 0, TimeSpan.Zero),
-                    "🎈 Задание для тебя",
+                    "Совет себе-джуну",
                     "Напиши один совет себе-джуну, который только начинал работать в IT."
                 )
             },
@@ -148,7 +148,7 @@ public class DailyAdventureProvider
                 (12, 18),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 18, 0, 0, 0, TimeSpan.Zero),
-                    "🎯 Задание на сегодня",
+                    "Пёс в кадре",
                     "Ищем собаку на улице. Фоткаем её. Вот такие дела, собачка."
                 )
             },
@@ -156,7 +156,7 @@ public class DailyAdventureProvider
                 (12, 19),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 19, 0, 0, 0, TimeSpan.Zero),
-                    "✨ Твое приключение",
+                    "Сколько шагов за день?",
                     "Если есть трекер шагов. Кидай в чат сколько прошёл за сегодня)"
                 )
             },
@@ -164,7 +164,7 @@ public class DailyAdventureProvider
                 (12, 20),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 20, 0, 0, 0, TimeSpan.Zero),
-                    "🎄 Новогоднее задание",
+                    "Добро без фотоотчёта",
                     "Одно любое доброе дело снова сделаем, фото не нужно"
                 )
             },
@@ -172,7 +172,7 @@ public class DailyAdventureProvider
                 (12, 21),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 21, 0, 0, 0, TimeSpan.Zero),
-                    "🌟 Сегодняшний квест",
+                    "Нарисуй снежинку кодом",
                     "Снежинка из кода. Напиши мини-скрипт на любом подходящем языке, который рисует снежинку. Скрин с результатом кидай в чат."
                 )
             },
@@ -180,7 +180,7 @@ public class DailyAdventureProvider
                 (12, 22),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 22, 0, 0, 0, TimeSpan.Zero),
-                    "🎁 Задание дня",
+                    "Новогоднее кино на паузе",
                     "Задание со стоп-кадром из любого новогоднего фильма тоже актуально в этом году. Шедевры этого года кидаем в чат."
                 )
             },
@@ -188,7 +188,7 @@ public class DailyAdventureProvider
                 (12, 23),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 23, 0, 0, 0, TimeSpan.Zero),
-                    "❄️ Зимнее приключение",
+                    "Спасибо в кружочке",
                     "Сегодня отправляем кружочек с благодарностью одному человеку в команде."
                 )
             },
@@ -196,7 +196,7 @@ public class DailyAdventureProvider
                 (12, 24),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 24, 0, 0, 0, TimeSpan.Zero),
-                    "🎊 Твоя миссия",
+                    "Мандарин из рук в руки",
                     "Мандарины до сих пор не ели чтоли? Угости коллегу."
                 )
             },
@@ -204,7 +204,7 @@ public class DailyAdventureProvider
                 (12, 25),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 25, 0, 0, 0, TimeSpan.Zero),
-                    "🪩 Задание на сегодня",
+                    "Год в одном слове",
                     "Отправляй своё слово года"
                 )
             },
@@ -212,7 +212,7 @@ public class DailyAdventureProvider
                 (12, 26),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 26, 0, 0, 0, TimeSpan.Zero),
-                    "💙 Сегодняшний квест",
+                    "Горошек идёт в салат",
                     "Зеленый горошек помните покупали? Сегодня краш тест новогоднего салата с ним. Готовим."
                 )
             },
@@ -220,7 +220,7 @@ public class DailyAdventureProvider
                 (12, 27),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 27, 0, 0, 0, TimeSpan.Zero),
-                    "🎄 Новогоднее задание",
+                    "Снеговик возвращается",
                     "Сегодня делаем снеговика. А ещё прикрепляем фото снеговика в 25 году"
                 )
             },
@@ -228,7 +228,7 @@ public class DailyAdventureProvider
                 (12, 28),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 28, 0, 0, 0, TimeSpan.Zero),
-                    "🌟 Сегодняшний квест",
+                    "Носки с характером",
                     "День прикольных носков. Фото по традиции кидаем в чат)"
                 )
             },
@@ -236,7 +236,7 @@ public class DailyAdventureProvider
                 (12, 29),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 29, 0, 0, 0, TimeSpan.Zero),
-                    "🎁 Задание дня",
+                    "Чем я горжусь в этом году",
                     "Напиши чем ты гордишься в этом году"
                 )
             },
@@ -244,7 +244,7 @@ public class DailyAdventureProvider
                 (12, 30),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 30, 0, 0, 0, TimeSpan.Zero),
-                    "❄️ Зимнее приключение",
+                    "Дед Мороз в розыске",
                     "Задание со звездочкой: Сегодня рейд Деда Мороза. Поймай его и сделай фото."
                 )
             },
@@ -252,7 +252,7 @@ public class DailyAdventureProvider
                 (12, 31),
                 new Adventure(
                     new DateTimeOffset(2026, 12, 31, 0, 0, 0, TimeSpan.Zero),
-                    "🎊 Твоя миссия",
+                    "Желание на новый год",
                     "Просто сегодня загадываем желание на грядущий год"
                 )
             }

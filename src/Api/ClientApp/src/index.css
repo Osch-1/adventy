@@ -8,7 +8,7 @@ html {
   overflow-x: hidden;
   height: 100%;
   /* Extend background to cover safe areas (Dynamic Island, notch) */
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  background: #102d40;
   /* Remove fixed attachment for better scroll performance on mobile */
   background-size: cover;
   background-position: center;
@@ -27,13 +27,11 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  background: #102d40;
   /* Remove fixed attachment for better scroll performance on mobile */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  min-height: 100vh;
-  min-height: -webkit-fill-available;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
@@ -46,8 +44,6 @@ body {
 
 #root {
   width: 100%;
-  min-height: 100vh;
-  min-height: -webkit-fill-available;
   overflow-x: hidden;
   position: relative;
 }
